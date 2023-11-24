@@ -1,6 +1,6 @@
 <?php
 
-include 'patrones.php';
+include './BOOKSTORES/patterns.php';
 session_start();
 
 // Primero hay que validar el $_SESSION no esté vacío porque si se intenta un login hay comprobar que tiene datos la sesion
