@@ -1,5 +1,5 @@
-create database tienda;
-use tienda;
+create database dbTienda;
+use dbTienda;
 
 DROP TABLE IF EXISTS
     Administrador;
@@ -12,37 +12,37 @@ DROP TABLE IF EXISTS
     -- Crear la tabla Administrador
 CREATE TABLE Administrador(
     ID INT PRIMARY KEY,
-    correo VARCHAR(255),
-    contraseña VARCHAR(255)
+    correo VARCHAR(30),
+    contraseña VARCHAR(25)
 );
 -- Crear la tabla Usuario
 CREATE TABLE Usuario(
-    ID INT PRIMARY KEY,
-    correo VARCHAR(255),
-    contraseña VARCHAR(255),
-    nombre VARCHAR(255),
-    apell1 VARCHAR(255),
-    apell2 VARCHAR(255)
+    correo VARCHAR(30) PRIMARY KEY,
+    contraseña VARCHAR(30),
+    nombre VARCHAR(30),
+    apell1 VARCHAR(30),
+    apell2 VARCHAR(30)
 );
 -- Crear la tabla Prenda
 CREATE TABLE Prenda(
     ID INT PRIMARY KEY,
-    nombre VARCHAR(255),
-    marca VARCHAR(255),
+    nombre VARCHAR(30),
+    marca VARCHAR(30),
     precio DECIMAL(10, 2),
     cantidad INT,
     talla VARCHAR(10),
+    imagen varchar(200),
     ID_ADMIN INT,
     FOREIGN KEY(ID_ADMIN) REFERENCES Administrador(ID)
 );
 -- Crear la tabla Carrito
 CREATE TABLE Carrito(
     ID INT PRIMARY KEY,
-    ID_Usuario INT,
-    FOREIGN KEY(ID_Usuario) REFERENCES Usuario(ID)
+    correo_usuario INT,
+    FOREIGN KEY(correo_usuario) REFERENCES Usuario(correo)
 );
 -- Crear la tabla Añade
-CREATE TABLE Añade(
+CREATE TABLE Contenido(
     ID_Carrito INT,
     ID_Prenda INT,
     cantidad INT,
