@@ -1,12 +1,15 @@
 <?php
 
 // CONSULTAS INSERT
+
 define("INSERTAR_USUARIO", 'INSERT INTO usuario VALUES (?,?,?,?,?)');
 define("INSERTAR_PRENDA", 'INSERT INTO prenda VALUES(?,?,?,?,?,?, "admin@gmail.com")');
 define("INSERTAR_CARRITO", 'INSERT INTO carrito(correo_usuario) VALUES(?)');
 define("INSERTAR_CONTENIDO", 'INSERT INTO contenido VALUES(?, ?, ?)');
 
+
 // CONSULTAS UPDATE
+
 define("ACTUALIZAR_USUARIO_CONSTRASEÑA", 'UPDATE usuario SET contraseña = ? WHERE correo = ?');
 define("ACTUALIZAR_USUARIO_NOMBRE", 'UPDATE usuario SET nombre = ? WHERE correo = ?');
 define("ACTUALIZAR_USUARIO_APELL1", 'UPDATE usuario SET apell1 = ? WHERE correo = ?');
@@ -21,11 +24,15 @@ define("ACTUALZIAR_PRENDA_IMAGEN", 'UPDATE prenda SET imagen = ? WHERE ID = ?');
 
 define("ACTUALIZAR_CANTIDAD_PRENDA", 'UPDATE contenido SET cantidad = ? WHERE ID_Prenda = ? AND ID_Carrito = ?');
 
+
 // CONSULATAS DELETE
+
 define("BORRAR_PRENDA", 'DELETE FROM prenda WHERE ID = ?');
 define("BORRAR_PRENDA_CARRITO", 'DELETE FROM contenido WHERE ID_Prenda = ?');
 
+
 // Consultas SELECT
+
 define("SELECT_USUARIO_CORREO_CONTRASEÑA", 'SELECT correo, contraseña FROM usuario WHERE correo = ?');
 define("SELECT_USUARIO", 'SELECT * FROM usuario WHERE correo = ?');
 define("SELECT_PRENDAS", 'SELECT nombre, marca, precio, cantidad, talla, imagen FROM prenda');

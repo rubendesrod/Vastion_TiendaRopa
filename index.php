@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="HTML/IMG/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="CSS/index.css">
     <?php
-    require_once("./PHP/BOOKSTORES/functions_global.php");
+    require_once("PHP/bookstores/functions_global.php");
     ?>
 </head>
 <body>
