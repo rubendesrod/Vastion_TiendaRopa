@@ -12,13 +12,32 @@ if (
     && preg_match(APELL, $_POST['ape1'])
     && preg_match(APELL, $_POST['ape2'])
 ) {
-    $_SESSION['email'] = htmlspecialchars($_POST['email']);
-    // Realizo la conexion a la base de datos para insertar el nuevo registro de un usuario
-    $connection = conectar_db();
+    // Con este if valido que las dos contraseñas son iguales
+    if ($_POST['pass'] == $_POST['passRep']) {
+        // Guardo el email en la sesión
+        $_SESSION['email'] = htmlspecialchars($_POST['email']);
 
-    header('Location: ../HTML/login.php');
+        // Meto los datos en un array que utilizará la funcion regsitro
+        $datos = [
+            "correo" => htmlspecialchars($_POST['email']),
+            "contraseña" => htmlspecialchars($_POST['pass']),
+            "nombre" => htmlspecialchars($_POST['name']),
+            "apell1" => htmlspecialchars($_POST['ape1']),
+            "apell2" => htmlspecialchars($_POST['ape2'])
+        ];
+
+        // Inicio la función que hara el regsitro
+        // SI se ha registrado le llevará al login si no al mismo formulario
+        if(iniciar_registro($datos)){
+            header('Location: ../HTML/login.php');
+        }else{
+            header('Location: ../HTML/register.html');
+        }
+    }else{
+        header('Location: ../HTML/register.html');
+    }
+
+
 } else {
     header('Location: ../HTML/register.html');
 }
-
-?>

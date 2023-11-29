@@ -11,14 +11,16 @@ session_start();
 // No valido el que esten vacios porque lo hago con HTML
 if (preg_match(EMAIL, $_POST['email']) && preg_match(CONTRA, $_POST['pass'])) {
 
-    $correo = htmlspecialchars($_POST['email']);
-    $contra = htmlspecialchars($_POST['pass']);
-
+    // Guardo los datos en un array asociativo que será utilizado mas delante
     $datos = [
-        "correo" => $correo,
-        "contraseña" => $contra
+        "correo" => htmlspecialchars($_POST['email']),
+        "contraseña" => htmlspecialchars($_POST['pass'])
     ];
+    
+    //Guardo el email en la sesión para no perderle
+    $_SESSION['email'] = $datos['correo'];
 
+    // Relizo la funcion del login si se logea le llevará al index si no al mismo formulario
     if (iniciar_login($datos)) {
         header('Location: ../index.php');
     } else {

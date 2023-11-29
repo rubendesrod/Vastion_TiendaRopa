@@ -2,6 +2,8 @@
    // Fichero que contiene las Constantes
 require_once('configDB.php');
 require_once ('querys.php');
+    // Inicio la sesion para no tenerla que abrir por cada funcion realizada
+session_start();
 
 /**
  * Funcion para comprobar que se ha iniciado sesión de alguna manera antes de entrar al index u otra página
@@ -36,9 +38,21 @@ function iniciar_login($datos){
         $consulta->bind_param('s', $correo);
         $consulta->execute();
         if($consulta->num_rows() > 0){
-            // Comprobar la contraseña
+            // Si devuelve fila si que existe ese correo ahora se comprueba la contraseña
+            $result = $consulta->get_result();
+            $datosUsuario = $result->fetch_object();
+            if(md5($contra) == $datosUsuario->contraseña){
+                // El usuario se ha logeado correctamente
+                $exito = 1;
+            }else{
+                // La contraseña es incorrecta
+                $exito = 0;
+            }
+            
+            // Cierro las dos consultas realizadas
+            $result->close();
             $consulta->close();
-            $exito = 1;
+
         }else{
             // El correo no existe
             $consulta->close();
@@ -92,14 +106,15 @@ function iniciar_registro($datos){
             $consulta->execute();
             if($consulta->num_rows() > 0){
                 // El usuario ha sido registrado en la DB
-                $conexion->close();
                 $exito = 1;
             }else{
                 // El usuario no ha sido registrado en la DB
-                $conexion->close();
                 $exito = 0;
             }
         }
+
+        $conexion->close();
+        return $exito;
 
     }else{
         echo "<h1>No se ha podido realizar la conexion a la DB</h1>";
