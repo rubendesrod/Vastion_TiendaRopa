@@ -20,20 +20,14 @@
     ?>
     <nav>
         <img src="HTML/IMG/logo.png" alt="Logo de Vastion">
+        <h2>ADMINISTRACION DE LA TIENDA</h2>
         <ul>
-            <li><a href="" id="actual">Inicio</a></li>
-            <li><a href="">Mi carrito</a></li>
-            <li><a href="">Mi Perfil</a></li>
+            <li><a href="" id="actual">Administrar</a></li>
             <li><a href="./HTML/login.php">Cerrar Sesión</a></li>
         </ul>
     </nav>
     <div class="content">
         <h1>ESCOGE LAS PRENDAS QUE MAS TE GUSTEN</h1>
-        <div class="MostrarPrendas">
-            <?php
-                devolver_prendas();
-            ?>
-        </div>
     </div>
 </body>
 </html>

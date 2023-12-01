@@ -6,6 +6,10 @@
     <title>Login</title>
     <link rel="stylesheet" href="../CSS/formularios.css">
     <link rel="shortcut icon" href="IMG/logo.png" type="image/x-icon">
+    <?php
+        session_start();
+        unset($_SESSION["login"]);
+    ?>
 </head>
 <body>
     <div class="content">

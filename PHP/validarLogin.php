@@ -15,11 +15,10 @@ $_SESSION['email'] = $datos['correo'];
 
 // Relizo la funcion del login si se logea le llevará al index si no al mismo formulario
 if (iniciar_login($datos)) {
-    $_SESSION["login"] == "ok";
-    header("Location: ../index.php");
+    $_SESSION["login"] = true;
+    header('Location: ../index.php');
 } else {
-    setcookie("dIncorrectos", "Los datos son incorrectos");
-    header("Location: ./../HTML/login.html");
+    header('Location: ../HTML/login.php');
 }
 ;
 

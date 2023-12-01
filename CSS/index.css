@@ -6,8 +6,60 @@
 
 body{
     background-color:#8D7B68;
-    justify-content: center;
-    align-items: center;
-    display: flex;
 }
 
+nav {
+    margin-top: 1em;
+    background-color: #C8B6A6;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px 10px #584d42;
+    font-size: 1.6em;
+  }
+
+  nav img{
+    width: 150px;
+  }
+
+  nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+
+  nav li {
+    margin-right: 15px;
+  }
+
+  nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: font-size 0.3s;
+}
+
+nav a:hover{
+    color:black;
+    font-size: 1.2em;
+  }
+
+nav #actual{
+    color: rgb(100, 84, 14);
+}
+
+.content{
+    margin-top: 2em;
+    background-color: #C8B6A6;
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px 10px #584d42;
+    align-items: center;
+}
+
+.content .tarjetas{
+  
+}

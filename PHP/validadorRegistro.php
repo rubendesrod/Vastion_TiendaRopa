@@ -6,14 +6,14 @@ include './BOOKSTORES/functions_global.php';
 
 // No valido el que esten vacios porque lo valido con HTML
 // Miro que cumplen con los patrones
-if (
+/* if (
     preg_match(EMAIL, $_POST['email'])
     && preg_match(CONTRA, $_POST['pass'])
     && preg_match(CONTRA, $_POST['passRep'])
     && preg_match(NAME, $_POST['name'])
     && preg_match(APELL, $_POST['ape1'])
     && preg_match(APELL, $_POST['ape2'])
-) {
+) { */
     
     // Con este if valido que las dos contraseñas son iguales
     if ($_POST['pass'] == $_POST['passRep']) {
@@ -41,8 +41,6 @@ if (
         header('Location: ../HTML/register.html');
     }
 
-} else {
-    echo "aqui";
-    exit();
+/* } else {
     header('Location: ../HTML/register.html');
-}
+} */

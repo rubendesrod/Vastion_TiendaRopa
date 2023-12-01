@@ -20,7 +20,7 @@ CREATE TABLE administrador(
 -- Crear la tabla Usuario
 CREATE TABLE usuario(
     correo VARCHAR(30) PRIMARY KEY,
-    contraseña VARCHAR(30),
+    contraseña VARCHAR(32),
     nombre VARCHAR(30),
     apell1 VARCHAR(30),
     apell2 VARCHAR(30)
@@ -68,7 +68,7 @@ INSERT INTO
 VALUES
     (
         'ruben@gmail.com',
-        '1234',
+        '81dc9bdb52d04dc20036dbd8313ed055',
         'Ruben',
         'Descalzo',
         'Rodríguez'
