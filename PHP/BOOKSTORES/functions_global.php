@@ -10,11 +10,11 @@ session_start();
  * @return exito Devuelve 1 si se ha iniciado sesion o 0 si no se ha iniciado sesión
  */
 function comprobar_acceder_sin_logear(){
-    session_start();
+    // Compruebo que se ha hecho login si la sesion['login'] ha sido definida
     if(isset($_SESSION["login"])){
-        return 1;
-    }else{
         return 0;
+    }else{
+        return 1;
     }
 }
 
@@ -32,16 +32,22 @@ function iniciar_login($datos){
         // Comprobar que existe el correo de ese usuario
         // Si existe comparar las contraseñas si no datos incorrectos
         $correo = $datos['correo'];
-        $contra = $datos['contraseña'];
+        $contra = md5($datos['contraseña']);
 
+        // Consulta preparada
         $consulta = $conexion->prepare(SELECT_USUARIO_CORREO_CONTRASEÑA);
         $consulta->bind_param('s', $correo);
         $consulta->execute();
-        if($consulta->num_rows() > 0){
-            // Si devuelve fila si que existe ese correo ahora se comprueba la contraseña
-            $result = $consulta->get_result();
+        
+        // Almaceno el resultado
+        $result = $consulta->get_result();
+
+        // Compruebo que exista el resultado
+        if($result->num_rows > 0){
+
+            // Si que existe ese correo ahora se comprueba la contraseña
             $datosUsuario = $result->fetch_object();
-            if(md5($contra) == $datosUsuario->contraseña){
+            if($contra == $datosUsuario->contraseña){
                 // El usuario se ha logeado correctamente
                 $exito = 1;
             }else{
@@ -80,31 +86,44 @@ function iniciar_registro($datos){
     $conexion = new mysqli(HOST,USER,PASS,DB);
     $exito = 0;
     
+    // Compruebo que me ha devuelto el objeto de conexion
     if($conexion){
 
+        // Almaceno los datos del array pasado por parametro
         $correo = $datos['correo'];
-        $contra = $datos['contraseña'];
+        $contra = md5($datos['contraseña']);
         $nombre = $datos['nombre'];
         $apell1 = $datos['apell1'];
         $apell2 = $datos['apell2'];
 
+        // Consulta preparada
         $consulta = $conexion->prepare(SELECT_USUARIO_CORREO_CONTRASEÑA);
         $consulta->bind_param('s', $correo);
         $consulta->execute();
-        if($consulta->num_rows() > 0){
+
+        // Obtengo el resultado
+        $result = $consulta->get_result();
+
+        // Verifico si se ha encontrado un usuario
+        if($result->num_rows > 0){
             // Existe el correo
             // No podrá  hacer el registro
             $consulta->close();
-            $conexion->close();
             $exito = 0;
         }else{
             // No existe el correo
             // Se le registrara como nuevo usuario en la DB
             $consulta->close();
+
+            // Consulta preparada
             $consulta = $conexion->prepare(INSERTAR_USUARIO);
             $consulta->bind_param('sssss', $correo, $contra, $nombre, $apell1, $apell2);
             $consulta->execute();
-            if($consulta->num_rows() > 0){
+
+            // Almaceno el resultado
+            $result = $consulta->get_result();
+
+            if($result->num_rows > 0){
                 // El usuario ha sido registrado en la DB
                 $exito = 1;
             }else{
@@ -113,13 +132,14 @@ function iniciar_registro($datos){
             }
         }
 
-        $conexion->close();
-        return $exito;
-
     }else{
         echo "<h1>No se ha podido realizar la conexion a la DB</h1>";
         $exito = 0;
+
     }
     
+    $conexion->close();
+    return $exito;
+
 }
 

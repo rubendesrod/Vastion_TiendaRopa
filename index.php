@@ -14,9 +14,8 @@
 <body>
     <?php 
         // Primero compruebo que se ha iniciado la sesión
-        if(!comprobar_acceder_sin_logear()){
+        if(comprobar_acceder_sin_logear()){
             header("Location: ./HTML/login.html");
-
         } 
     ?>
     <nav>

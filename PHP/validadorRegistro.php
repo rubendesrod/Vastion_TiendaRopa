@@ -1,19 +1,23 @@
 <?php
+
+// Incluyo las bibliotecas de los patrones y las funciones
 include './BOOKSTORES/patterns.php';
-include './BOOKSTORES/functions.php';
-session_start();
-// Miro que cumplen con los patrones
+include './BOOKSTORES/functions_global.php';
+
 // No valido el que esten vacios porque lo valido con HTML
+// Miro que cumplen con los patrones
 if (
     preg_match(EMAIL, $_POST['email'])
-    && preg_match(PASS, $_POST['pass'])
-    && preg_match(PASS, $_POST['passRep'])
+    && preg_match(CONTRA, $_POST['pass'])
+    && preg_match(CONTRA, $_POST['passRep'])
     && preg_match(NAME, $_POST['name'])
     && preg_match(APELL, $_POST['ape1'])
     && preg_match(APELL, $_POST['ape2'])
 ) {
+    
     // Con este if valido que las dos contraseñas son iguales
     if ($_POST['pass'] == $_POST['passRep']) {
+
         // Guardo el email en la sesión
         $_SESSION['email'] = htmlspecialchars($_POST['email']);
 
@@ -37,7 +41,8 @@ if (
         header('Location: ../HTML/register.html');
     }
 
-
 } else {
+    echo "aqui";
+    exit();
     header('Location: ../HTML/register.html');
 }
