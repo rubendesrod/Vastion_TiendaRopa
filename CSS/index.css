@@ -8,6 +8,8 @@ body{
     background-color:#8D7B68;
 }
 
+/* -- Aqui va el estilo de lo que es el navegador -- */
+
 nav {
     margin-top: 1em;
     background-color: #C8B6A6;
@@ -51,15 +53,84 @@ nav #actual{
     color: rgb(100, 84, 14);
 }
 
+/* Aqui esta el estilo del contenedor */
 .content{
     margin-top: 2em;
     background-color: #C8B6A6;
     padding: 10px;
     border-radius: 20px;
     box-shadow: 0px 0px 10px 10px #584d42;
-    align-items: center;
 }
 
-.content .tarjetas{
-  
+/* Aqui esta el estilo para de como van las prendas */
+
+.mostrarPrendas {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px; 
+}
+
+.prenda {
+  border: 2px solid #584d42;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 250px;
+  margin: 10px;
+  /*prueba*/
+  opacity: 0; /* Inicialmente establecemos la opacidad a 0 */
+  transform: translateY(20px); /* Desplazamos la prenda hacia abajo */
+  transition: opacity 0.5s ease, transform 0.5s ease; /* Agregamos transición para opacidad y transformación */
+}
+
+.prenda.mostrar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card-img {
+  width: 100%;
+  height: auto;
+}
+
+.card-info {
+  padding: 4px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.card-details {
+  font-size: 14px;
+  color: #555;
+}
+
+.card-price {
+  font-size: 18px;
+  font-weight: bold;
+  color: #e44d26; 
+}
+
+.add-button {
+  background-color: #584d42;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.add-button:hover {
+  background-color: rgb(100, 84, 14);
+}
+
+/*AQUI ESTA EL ESTILO DEL FOOTER*/
+.footer{
+  margin-top: 4em;
+  color: #555;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
 }

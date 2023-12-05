@@ -173,10 +173,14 @@ function devolver_prendas()
         while($prenda = $consulta->fetch(PDO::FETCH_BOUND)){
             echo<<<FIN
             <div class="prenda">
-            <p> $nombre -- $marca [$precio €]</p>
-            <p> $cantidad -- $talla</p>
-            <img src="./HTML$imagen" alt="$nombre-$marca"/>
-                <button>AÑADIR</button>
+                <img class="card-img" src="./HTML$imagen" alt="$nombre-$marca"/>
+                <hr>
+                <div class="card-info">
+                    <p class="card-title">$nombre - $marca</p>
+                    <p class="card-details">$cantidad - Talla: $talla</p>
+                    <p class="card-price">$precio €</p>
+                    <button class="add-button">AÑADIR</button>
+                </div>
             </div>
             FIN;
         }
