@@ -35,7 +35,7 @@ define("BORRAR_PRENDA_CARRITO", 'DELETE FROM contenido WHERE ID_Prenda = ?');
 
 define("SELECT_USUARIO_CORREO_CONTRASEÑA", 'SELECT correo, contraseña FROM usuario WHERE correo = ?');
 define("SELECT_USUARIO", 'SELECT * FROM usuario WHERE correo = ?');
-define("SELECT_PRENDAS", 'SELECT nombre, marca, precio, cantidad, talla, imagen FROM prenda');
+define("SELECT_PRENDAS", 'SELECT ID, nombre, marca, precio, cantidad, talla, imagen FROM prenda');
 define("SELECT_PRENDA_ID", 'SELECT * FROM prenda WHERE ID = ?');
 
 

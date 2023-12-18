@@ -27,7 +27,7 @@
         </ul>
     </nav>
     <div class="content">
-        <h1>ESCOGE LAS PRENDAS QUE MAS TE GUSTEN</h1>
+        <h1>ADMINISTRACION DE PRENDAS</h1>
     </div>
 </body>
 </html>

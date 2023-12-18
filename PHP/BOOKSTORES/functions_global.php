@@ -5,6 +5,28 @@ require_once('querys.php');
 // Inicio la sesion para no tenerla que abrir por cada funcion realizada
 session_start();
 
+
+/**
+ * Funcion para realizar una conexion a la base de datos con PDO 
+ * @return PDO objeto de la conexion a la base de datos o 0 si no se ha realizado la conexion
+ */
+function conectar_db()
+{
+    // crear la conexion a la db
+    try {
+        $conexion = new PDO(DSN, USER, PASS);
+        return $conexion;
+    } catch (PDOException $e) {
+        echo "No se ha podido realizar la conexion a la DB" . $e->getMessage();
+        exit();
+    } catch (Exception $e) {
+        echo "hay algun tipo de error al intentar crear la DB" . $e->getMessage();
+        exit();
+    }
+}
+
+
+
 /**
  * Funcion para comprobar que se ha iniciado sesión de alguna manera antes de entrar al index u otra página
  * @return exito Devuelve 1 si se ha iniciado sesion o 0 si no se ha iniciado sesión
@@ -18,6 +40,8 @@ function comprobar_acceder_sin_logear()
         return 1;
     }
 }
+
+
 
 /**
  * Funcion para realizar el envio del login y también se comprobará si el que intenta inicar es el admin
@@ -52,6 +76,8 @@ function iniciar_login($datos)
             if ($contra == $datosUsuario->contraseña) {
                 // El usuario se ha logeado correctamente
                 $exito = 1;
+                // Guardo el correo en la sesion para saber el usuario que hace las acciones
+                $_SESSION["correo"] = $correo;
             } else {
                 // La contraseña es incorrecta
                 $exito = 0;
@@ -74,6 +100,8 @@ function iniciar_login($datos)
     $conexion->close();
     return $exito;
 }
+
+
 
 /**
  * Funcion para realizar el registro del usuario
@@ -114,19 +142,14 @@ function iniciar_registro($datos)
             // No existe el correo
             // Se le registrara como nuevo usuario en la DB
             $consulta->close();
-
-            // Consulta preparada
-            $consulta = $conexion->prepare(INSERTAR_USUARIO);
-            $consulta->bind_param('sssss', $correo, $contra, $nombre, $apell1, $apell2);
-            $consulta->execute();
-
-            // Almaceno el resultado
-            $result = $consulta->get_result();
-            if ($result->num_rows > 0) {
-                // El usuario ha sido registrado en la DB
+            try {
+                // Consulta preparada
+                $consulta = $conexion->prepare(INSERTAR_USUARIO);
+                $consulta->bind_param('sssss', $correo, $contra, $nombre, $apell1, $apell2);
+                $consulta->execute();
                 $exito = 1;
-            } else {
-                // El usuario no ha sido registrado en la DB
+            } catch (Exception $e) {
+                echo "error de excepcion" . $e->getMessage();
                 $exito = 0;
             }
         }
@@ -134,10 +157,11 @@ function iniciar_registro($datos)
         echo "<h1>No se ha podido realizar la conexion a la DB</h1>";
         $exito = 0;
     }
-
     $conexion->close();
     return $exito;
 }
+
+
 
 /**
  * Funcion que devolverá todas las prendas disponibles en la tienda
@@ -156,7 +180,7 @@ function devolver_prendas()
         );
 
     } catch (PDOException $e) {
-        echo "Error en la conexion a la DB ".$e->getMessage();
+        echo "Error en la conexion a la DB " . $e->getMessage();
     }
 
     // Realizo la consulta preparada
@@ -164,14 +188,15 @@ function devolver_prendas()
 
         // nombre, marca, precio, cantidad, talla, imagen
         $consulta = $db->query(SELECT_PRENDAS);
-        $consulta->bindColumn(1, $nombre);
-        $consulta->bindColumn(2, $marca);
-        $consulta->bindColumn(3, $precio);
-        $consulta->bindColumn(4, $cantidad);
-        $consulta->bindColumn(5, $talla);
-        $consulta->bindColumn(6, $imagen); 
-        while($prenda = $consulta->fetch(PDO::FETCH_BOUND)){
-            echo<<<FIN
+        $consulta->bindColumn(1, $id);
+        $consulta->bindColumn(2, $nombre);
+        $consulta->bindColumn(3, $marca);
+        $consulta->bindColumn(4, $precio);
+        $consulta->bindColumn(5, $cantidad);
+        $consulta->bindColumn(6, $talla);
+        $consulta->bindColumn(7, $imagen);
+        while ($prenda = $consulta->fetch(PDO::FETCH_BOUND)) {
+            echo <<<FIN
             <div class="prenda">
                 <img class="card-img" src="./HTML$imagen" alt="$nombre-$marca"/>
                 <hr>
@@ -179,7 +204,9 @@ function devolver_prendas()
                     <p class="card-title">$nombre - $marca</p>
                     <p class="card-details">$cantidad - Talla: $talla</p>
                     <p class="card-price">$precio €</p>
-                    <button class="add-button">AÑADIR</button>
+                    <form action="../PHP/añadirPrenda.php">
+                    <button class="add-button" name="id" value="$id">AÑADIR</button>
+                    </form>
                 </div>
             </div>
             FIN;
@@ -187,7 +214,44 @@ function devolver_prendas()
 
 
     } catch (PDOException $e) {
-        echo "La conulsta no se ha realizado correctamente:<br>".$e->getMessage();
+        echo "La conulsta no se ha realizado correctamente:<br>" . $e->getMessage();
+    }
+
+}
+
+/**Funcion para devolver los datos de la cuenta */
+function detalles_cuenta()
+{
+    $correo = $_SESSION["correo"];
+
+    // Primero realizar la conexion a la base de datos
+    $db = conectar_db();
+
+    try {
+
+        $consulta = $db->prepare(SELECT_USUARIO);
+        $consulta->bindParam(1, $correo);
+        if ($consulta->execute()) {
+            if ($consulta->rowCount() > 0) {
+                while ($cuenta = $consulta->fetch(PDO::FETCH_OBJ)) {
+                    echo <<<FIN
+                    <div class="detallesCuenta">
+                        <div><h4>Correo: </h4><p> $cuenta->correo</p></div>
+                        <div><h4>Nombre: </h4> <p>$cuenta->nombre</p></div>
+                        <div><h4>Apellidos: </h4> <p>$cuenta->apell1 $cuenta->apell2</p></div>
+                        <div><form action="../PHP/cambiarContra.php">
+                            <button>cambiar contraseña</button>
+                        </form></div>
+                    </div>
+                    FIN;
+                }
+            }
+        }
+
+    } catch (PDOException $e) {
+        echo "Error en la preparación de la consulta" . $e->getMessage();
+    } catch (Exception $e) {
+        echo "Error no especificado de excepcion" . $e->getMessage();
     }
 
 }

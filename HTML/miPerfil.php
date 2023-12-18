@@ -23,14 +23,17 @@
     <nav>
         <img src="./IMG/logo.png" alt="Logo de Vastion">
         <ul>
-            <li><a href="">Inicio</a></li>
+            <li><a href="../index.php">Inicio</a></li>
             <li><a href="">Mi carrito</a></li>
             <li><a href="#" id="actual">Mi Perfil</a></li>
-            <li><a href="./HTML/login.php">Cerrar Sesión</a></li>
+            <li><a href="./login.php">Cerrar Sesión</a></li>
         </ul>
     </nav>
     <div class="content">
-
+        <!--Añado la informacion de la cuenta-->
+        <?php
+            detalles_cuenta();
+        ?>
     </div>
 
 </body>

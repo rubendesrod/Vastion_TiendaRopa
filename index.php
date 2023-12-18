@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,12 +12,13 @@
     require_once("PHP/bookstores/functions_global.php");
     ?>
 </head>
+
 <body>
-    <?php 
-        // Primero compruebo que se ha iniciado la sesión
-        if(comprobar_acceder_sin_logear()){
-            header("Location: ./HTML/login.php");
-        } 
+    <?php
+    // Primero compruebo que se ha iniciado la sesión
+    if (comprobar_acceder_sin_logear()) {
+        header("Location: ./login.php");
+    }
     ?>
     <nav>
         <img src="HTML/IMG/logo.png" alt="Logo de Vastion">
@@ -32,7 +34,7 @@
         <!--Clas el cual va a contener todas las tarjetas de las prendas-->
         <div class="mostrarPrendas">
             <?php
-                devolver_prendas();
+            devolver_prendas();
             ?>
         </div>
         <!--Footer dentro del content-->
@@ -45,15 +47,16 @@
     <!-- Script que hace el efecto de mostrar las prendas-->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
-    $(document).ready(function() {
-        $(".prenda").each(function(index) {
-            // Agregar la clase "mostrar" a cada prenda con un retraso
-            $(this).delay(200 * index).queue(function(next) {
-                $(this).addClass("mostrar");
-                next();
+        $(document).ready(function () {
+            $(".prenda").each(function (index) {
+                // Agregar la clase "mostrar" a cada prenda con un retraso
+                $(this).delay(200 * index).queue(function (next) {
+                    $(this).addClass("mostrar");
+                    next();
+                });
             });
         });
-    });
-</script>
+    </script>
 </body>
+
 </html>
