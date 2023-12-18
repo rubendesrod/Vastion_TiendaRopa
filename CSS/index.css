@@ -123,19 +123,6 @@ nav #actual{
   font-size: 14px;
 }
 
-.add-button:hover {
-  background-color: rgb(100, 84, 14);
-}
-
-/*AQUI ESTA EL ESTILO DEL FOOTER*/
-.footer{
-  margin-top: 4em;
-  color: #555;
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-}
-
 .detallesCuenta{
   
   text-align: center;
@@ -158,3 +145,67 @@ nav #actual{
   }
 
 }
+
+/*Estilo del div del infoPrenda que muestra una sola prenda*/
+.infoPrenda{
+  display: flex;
+
+  & form button{
+    background-color: #584d42;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  & form a{
+    background-color: #584d42;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  
+  & form a:hover{
+    background-color: #352e28;
+    font-size: 12px;
+    transition: 0.4s;
+  }
+
+  & form button:hover {
+    background-color: #352e28;
+    font-size: 12px;
+    transition: 0.4s;
+  }
+
+  & form input{
+    margin-left: 5px;
+    border: 0px;
+    border-bottom: 1px solid black;
+    background-color: #C8B6A6;
+  }
+
+  & form input:focus{
+    outline: none;
+  }
+
+}
+
+.add-button:hover {
+  background-color: rgb(100, 84, 14);
+}
+
+/*AQUI ESTA EL ESTILO DEL FOOTER*/
+.footer{
+  margin-top: 4em;
+  color: #555;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+

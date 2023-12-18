@@ -17,7 +17,7 @@
     <?php
     // Primero compruebo que se ha iniciado la sesión
     if (comprobar_acceder_sin_logear()) {
-        header("Location: ./login.php");
+        header("Location: ./HTML/login.php");
     }
     ?>
     <nav>

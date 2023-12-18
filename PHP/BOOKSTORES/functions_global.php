@@ -14,7 +14,12 @@ function conectar_db()
 {
     // crear la conexion a la db
     try {
-        $conexion = new PDO(DSN, USER, PASS);
+        $conexion = new PDO(
+            DSN,
+            USER,
+            PASS,
+            array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+        );
         return $conexion;
     } catch (PDOException $e) {
         echo "No se ha podido realizar la conexion a la DB" . $e->getMessage();
@@ -45,7 +50,7 @@ function comprobar_acceder_sin_logear()
 
 /**
  * Funcion para realizar el envio del login y también se comprobará si el que intenta inicar es el admin
- * @param datos array asciativo que contiene los datos del login
+ * @param array $datos array asciativo que contiene los datos del login
  * @return exito devuelve un 1 si el logeo es correcto o 0 si el logeo no es correcto
  */
 function iniciar_login($datos)
@@ -105,7 +110,7 @@ function iniciar_login($datos)
 
 /**
  * Funcion para realizar el registro del usuario
- * @param datos array asociativo que contiene los datos del registro del usuario
+ * @param array $datos array asociativo que contiene los datos del registro del usuario
  * @return exito devuelve 1 si se ha registrado correctamente o 0 si no se ha podido registrar
  */
 function iniciar_registro($datos)
@@ -147,6 +152,7 @@ function iniciar_registro($datos)
                 $consulta = $conexion->prepare(INSERTAR_USUARIO);
                 $consulta->bind_param('sssss', $correo, $contra, $nombre, $apell1, $apell2);
                 $consulta->execute();
+                crear_carrito($correo);
                 $exito = 1;
             } catch (Exception $e) {
                 echo "error de excepcion" . $e->getMessage();
@@ -164,24 +170,164 @@ function iniciar_registro($datos)
 
 
 /**
+ * Funcion para crear el carrito del usuario que se registre
+ * @param string $correo_usuario correo del usuario que se va a vincular a la id del carrito
+ */
+function crear_carrito($correo_usuario){
+
+    // Variable usada como flag
+    $exito = 0;
+
+    // Crear la conexion a la base de datos
+    $db = conectar_db();
+
+    try{
+        $consulta = $db->prepare(INSERTAR_CARRITO);
+        $consulta->bindParam(1, $correo_usuario);
+        $consulta->execute();
+        $exito = 0;
+    }catch(PDOException $e){
+        echo "error en la consulta preparada ".$e->getMessage(); 
+        exit();
+    }catch(Exception $e){
+        echo "Error de expcepcion: ".$e->getMessage();
+        exit();
+    }
+
+    return $exito;
+
+}
+
+
+
+/**
+ * Funcion para sacar el id del carrito de un usuario
+ * @param string $correo correo del usuario que se quiere saber el id del carrito
+ * @return integer id del correo
+ */
+function sacar_id_carrito($correo){
+
+    $db = conectar_db();
+
+    try{
+
+        $consulta = $db->prepare(SELECT_ID_CARRITO);
+        $consulta->bindParam(1, $correo);
+        $consulta->execute();
+    
+        $consulta->bindColumn(1, $id);
+        $consulta->fetch(PDO::FETCH_BOUND);
+    
+        return $id;
+
+    }catch(PDOException $e){
+        echo "error en la consulta preparada: ".$e->getMessage();
+    }catch(Exception $e){
+        echo "errpr de excepcion no expecificado: ".$e->getMessage();
+    }
+
+}
+
+
+
+/**
+ * Funcion para añadir una prenda al carrito del usuario
+ * @param array $datos contiene los datos para realizar el insert
+ */
+function añadir_prenda_carrito($datos){
+
+    $db = conectar_db();
+
+    try{
+
+        $consulta = $db->prepare(INSERTAR_PRENDA_CARRITO);
+        $consulta->execute($datos);
+
+        if ($consulta->rowCount() <= 0) {
+            throw new Exception("Error: no se pudo insertar la prenda al carrito", 1);
+        }
+
+        actualizar_prenda($datos);
+        
+    }catch(PDOException $e){
+        echo "error en la consulta preparada: ".$e->getMessage();
+        exit();
+    }catch(Exception $e){
+        echo "error de exception no identificado: ".$e->getMessage();
+        exit();
+    }
+}
+
+
+
+/**
+ * Funcion para actualizar la cantidad de una prenda
+ * @param array $datos contiene los datos de id y cantidad de la prenda
+ */
+function actualizar_prenda($datos){
+
+    $db = conectar_db();
+
+    $cantidadReal = cantidad_prenda($datos[":idPrenda"]);
+
+    try{
+
+        $query = $db->prepare(ACTUALZIAR_PRENDA_CANTIDAD);
+        $query->bindParam(1, $cantidadReal);
+        $query->bindParam(2, $datos[":idPrenda"]);
+        $query->execute();
+        if ($query->rowCount() <= 0) {
+            throw new Exception("Error: No se puedo insertar la transferencia", 1);
+        }
+        
+    }catch(PDOException $e){
+        echo "error en la consulta preparada: ".$e->getMessage();
+        exit();
+    }catch(Exception $e){
+        echo "error de exception no identificado: ".$e->getMessage();
+        exit();
+    }
+}
+
+
+
+/**
+ * Funcion para sacar la cantidad de una prenda
+ * @param integer $id_prenda id de la prenda que se quiere saber la cantidad
+ * @return integer cantidad de la prenda
+ */
+function cantidad_prenda($id_prenda){
+
+    $db = conectar_db();
+
+    try{
+
+        $consulta = $db->prepare(SELECT_PRENDA_ID);
+        $consulta->bindParam(1, $datos[":idPrenda"]);
+        $consulta->execute();
+        $pr = $consulta->fetch(PDO::FETCH_OBJ);
+        return $pr->cantidad;
+    
+    }catch(PDOException $e){
+        echo "error en la consulta preparada: ".$e->getMessage();
+        exit();
+    }catch(Exception $e){
+        echo "error de exception no identificado: ".$e->getMessage();
+        exit();
+    }
+
+}
+
+
+
+/**
  * Funcion que devolverá todas las prendas disponibles en la tienda
  */
 function devolver_prendas()
 {
 
     // Inicio la conexion a la base de datos
-    try {
-
-        $db = new PDO(
-            DSN,
-            USER,
-            PASS,
-            array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
-        );
-
-    } catch (PDOException $e) {
-        echo "Error en la conexion a la DB " . $e->getMessage();
-    }
+    $db = conectar_db();
 
     // Realizo la consulta preparada
     try {
@@ -204,8 +350,8 @@ function devolver_prendas()
                     <p class="card-title">$nombre - $marca</p>
                     <p class="card-details">$cantidad - Talla: $talla</p>
                     <p class="card-price">$precio €</p>
-                    <form action="../PHP/añadirPrenda.php">
-                    <button class="add-button" name="id" value="$id">AÑADIR</button>
+                    <form action="./HTML/infoPrenda.php" method="post">
+                    <button class="add-button" name="id" value="$id">VER</button>
                     </form>
                 </div>
             </div>
@@ -219,7 +365,51 @@ function devolver_prendas()
 
 }
 
-/**Funcion para devolver los datos de la cuenta */
+/**
+ * Funcion para devolver una sola prenda, que será cual usuario quiera ver una de las prendas que hay mostradas
+ * @param INTEGER $id id de la prenda que le usuario ha seleccionado
+ */
+function devolver_prenda($id){
+    
+    $db = conectar_db();
+
+    try{
+
+        $consulta = $db->prepare(SELECT_PRENDA_ID);
+        $consulta->bindParam(1, $id);
+        $consulta->execute();
+        while($prenda = $consulta->fetch(PDO::FETCH_OBJ)){
+            echo<<<FIN
+            <div>
+                <img src=".$prenda->imagen" alt="$prenda->nombre"/>
+            </div>
+            <div>
+                <h1>$prenda->nombre - $prenda->marca</h1>
+                <h3>Talla - $prenda->talla || Precio - $prenda->precio €</h3>
+                <h4>Quedan $prenda->cantidad unidades</h4>
+                <form action="../PHP/añadirPrenda.php" method="post">
+                    <label>Cantidad</label>
+                    <input name="cantidad" type="number" min="1" max="$prenda->cantidad"/>
+                    <br><br>
+                    <button name="id" value="$prenda->ID">AÑADIR</button>
+                    <a href="../index.php">VOLVER</a>
+                </form>
+            </div>
+            FIN;
+        }
+
+    }catch(PDOException $e){
+        echo "error con la sonsulta preparada: ".$e->getMessage();
+    }catch(Exception $e){
+        echo "Error de expcepcion no expecificado: ".$e->getMessage();
+    }
+
+}
+
+
+/**
+ * Funcion para devolver los datos de la cuenta 
+ */
 function detalles_cuenta()
 {
     $correo = $_SESSION["correo"];

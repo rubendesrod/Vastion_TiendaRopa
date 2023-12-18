@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="IMG/logo.png" type="image/x-icon">
     <?php
         session_start();
-        unset($_SESSION["login"]);
+        session_destroy();
     ?>
 </head>
 <body>

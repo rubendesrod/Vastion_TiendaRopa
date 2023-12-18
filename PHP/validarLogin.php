@@ -10,9 +10,6 @@ $datos = [
     "contraseña" => htmlspecialchars($_POST['pass'])
 ];
 
-//Guardo el email en la sesión para no perderle
-$_SESSION['email'] = $datos['correo'];
-
 // Relizo la funcion del login si se logea le llevará al index si no al mismo formulario
 if (iniciar_login($datos)) {
     $_SESSION["login"] = true;
