@@ -173,7 +173,8 @@ function iniciar_registro($datos)
  * Funcion para crear el carrito del usuario que se registre
  * @param string $correo_usuario correo del usuario que se va a vincular a la id del carrito
  */
-function crear_carrito($correo_usuario){
+function crear_carrito($correo_usuario)
+{
 
     // Variable usada como flag
     $exito = 0;
@@ -181,16 +182,16 @@ function crear_carrito($correo_usuario){
     // Crear la conexion a la base de datos
     $db = conectar_db();
 
-    try{
+    try {
         $consulta = $db->prepare(INSERTAR_CARRITO);
         $consulta->bindParam(1, $correo_usuario);
         $consulta->execute();
         $exito = 0;
-    }catch(PDOException $e){
-        echo "error en la consulta preparada ".$e->getMessage(); 
+    } catch (PDOException $e) {
+        echo "error en la consulta preparada " . $e->getMessage();
         exit();
-    }catch(Exception $e){
-        echo "Error de expcepcion: ".$e->getMessage();
+    } catch (Exception $e) {
+        echo "Error de expcepcion: " . $e->getMessage();
         exit();
     }
 
@@ -205,25 +206,26 @@ function crear_carrito($correo_usuario){
  * @param string $correo correo del usuario que se quiere saber el id del carrito
  * @return integer id del correo
  */
-function sacar_id_carrito($correo){
+function sacar_id_carrito($correo)
+{
 
     $db = conectar_db();
 
-    try{
+    try {
 
         $consulta = $db->prepare(SELECT_ID_CARRITO);
         $consulta->bindParam(1, $correo);
         $consulta->execute();
-    
+
         $consulta->bindColumn(1, $id);
         $consulta->fetch(PDO::FETCH_BOUND);
-    
+
         return $id;
 
-    }catch(PDOException $e){
-        echo "error en la consulta preparada: ".$e->getMessage();
-    }catch(Exception $e){
-        echo "errpr de excepcion no expecificado: ".$e->getMessage();
+    } catch (PDOException $e) {
+        echo "error en la consulta preparada: " . $e->getMessage();
+    } catch (Exception $e) {
+        echo "errpr de excepcion no expecificado: " . $e->getMessage();
     }
 
 }
@@ -234,11 +236,12 @@ function sacar_id_carrito($correo){
  * Funcion para añadir una prenda al carrito del usuario
  * @param array $datos contiene los datos para realizar el insert
  */
-function añadir_prenda_carrito($datos){
+function añadir_prenda_carrito($datos)
+{
 
     $db = conectar_db();
 
-    try{
+    try {
 
         $consulta = $db->prepare(INSERTAR_PRENDA_CARRITO);
         $consulta->execute($datos);
@@ -248,12 +251,12 @@ function añadir_prenda_carrito($datos){
         }
 
         actualizar_prenda($datos);
-        
-    }catch(PDOException $e){
-        echo "error en la consulta preparada: ".$e->getMessage();
+
+    } catch (PDOException $e) {
+        echo "error en la consulta preparada: " . $e->getMessage();
         exit();
-    }catch(Exception $e){
-        echo "error de exception no identificado: ".$e->getMessage();
+    } catch (Exception $e) {
+        echo "error de exception no identificado: " . $e->getMessage();
         exit();
     }
 }
@@ -264,27 +267,27 @@ function añadir_prenda_carrito($datos){
  * Funcion para actualizar la cantidad de una prenda
  * @param array $datos contiene los datos de id y cantidad de la prenda
  */
-function actualizar_prenda($datos){
+function actualizar_prenda($datos)
+{
 
     $db = conectar_db();
 
     $cantidadReal = cantidad_prenda($datos[":idPrenda"]);
+    // Ahora sacamos la cantidad total que quedaría de la prenda
+    $cantidadTotal = $cantidadReal - $datos[":cantidad"];
 
-    try{
+    try {
 
         $query = $db->prepare(ACTUALZIAR_PRENDA_CANTIDAD);
-        $query->bindParam(1, $cantidadReal);
+        $query->bindParam(1, $cantidadTotal);
         $query->bindParam(2, $datos[":idPrenda"]);
         $query->execute();
-        if ($query->rowCount() <= 0) {
-            throw new Exception("Error: No se puedo insertar la transferencia", 1);
-        }
-        
-    }catch(PDOException $e){
-        echo "error en la consulta preparada: ".$e->getMessage();
+
+    } catch (PDOException $e) {
+        echo "error en la consulta preparada: " . $e->getMessage();
         exit();
-    }catch(Exception $e){
-        echo "error de exception no identificado: ".$e->getMessage();
+    } catch (Exception $e) {
+        echo "error de exception no identificado: " . $e->getMessage();
         exit();
     }
 }
@@ -296,23 +299,24 @@ function actualizar_prenda($datos){
  * @param integer $id_prenda id de la prenda que se quiere saber la cantidad
  * @return integer cantidad de la prenda
  */
-function cantidad_prenda($id_prenda){
+function cantidad_prenda($id_prenda)
+{
 
     $db = conectar_db();
 
-    try{
+    try {
 
         $consulta = $db->prepare(SELECT_PRENDA_ID);
-        $consulta->bindParam(1, $datos[":idPrenda"]);
+        $consulta->bindParam(1, $id_prenda);
         $consulta->execute();
         $pr = $consulta->fetch(PDO::FETCH_OBJ);
         return $pr->cantidad;
-    
-    }catch(PDOException $e){
-        echo "error en la consulta preparada: ".$e->getMessage();
+
+    } catch (PDOException $e) {
+        echo "error en la consulta preparada: " . $e->getMessage();
         exit();
-    }catch(Exception $e){
-        echo "error de exception no identificado: ".$e->getMessage();
+    } catch (Exception $e) {
+        echo "error de exception no identificado: " . $e->getMessage();
         exit();
     }
 
@@ -342,20 +346,22 @@ function devolver_prendas()
         $consulta->bindColumn(6, $talla);
         $consulta->bindColumn(7, $imagen);
         while ($prenda = $consulta->fetch(PDO::FETCH_BOUND)) {
-            echo <<<FIN
-            <div class="prenda">
-                <img class="card-img" src="./HTML$imagen" alt="$nombre-$marca"/>
-                <hr>
-                <div class="card-info">
-                    <p class="card-title">$nombre - $marca</p>
-                    <p class="card-details">$cantidad - Talla: $talla</p>
-                    <p class="card-price">$precio €</p>
-                    <form action="./HTML/infoPrenda.php" method="post">
-                    <button class="add-button" name="id" value="$id">VER</button>
-                    </form>
+            if ($cantidad > 0) {
+                echo <<<FIN
+                <div class="prenda">
+                    <img class="card-img" src="./HTML$imagen" alt="$nombre-$marca"/>
+                    <hr>
+                    <div class="card-info">
+                        <p class="card-title">$nombre - $marca</p>
+                        <p class="card-details">$cantidad - Talla: $talla</p>
+                        <p class="card-price">$precio €</p>
+                        <form action="./HTML/infoPrenda.php" method="post">
+                        <button class="add-button" name="id" value="$id">VER</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            FIN;
+                FIN;
+            }
         }
 
 
@@ -369,17 +375,18 @@ function devolver_prendas()
  * Funcion para devolver una sola prenda, que será cual usuario quiera ver una de las prendas que hay mostradas
  * @param INTEGER $id id de la prenda que le usuario ha seleccionado
  */
-function devolver_prenda($id){
-    
+function devolver_prenda($id)
+{
+
     $db = conectar_db();
 
-    try{
+    try {
 
         $consulta = $db->prepare(SELECT_PRENDA_ID);
         $consulta->bindParam(1, $id);
         $consulta->execute();
-        while($prenda = $consulta->fetch(PDO::FETCH_OBJ)){
-            echo<<<FIN
+        while ($prenda = $consulta->fetch(PDO::FETCH_OBJ)) {
+            echo <<<FIN
             <div>
                 <img src=".$prenda->imagen" alt="$prenda->nombre"/>
             </div>
@@ -398,10 +405,10 @@ function devolver_prenda($id){
             FIN;
         }
 
-    }catch(PDOException $e){
-        echo "error con la sonsulta preparada: ".$e->getMessage();
-    }catch(Exception $e){
-        echo "Error de expcepcion no expecificado: ".$e->getMessage();
+    } catch (PDOException $e) {
+        echo "error con la sonsulta preparada: " . $e->getMessage();
+    } catch (Exception $e) {
+        echo "Error de expcepcion no expecificado: " . $e->getMessage();
     }
 
 }
@@ -442,6 +449,49 @@ function detalles_cuenta()
         echo "Error en la preparación de la consulta" . $e->getMessage();
     } catch (Exception $e) {
         echo "Error no especificado de excepcion" . $e->getMessage();
+    }
+
+}
+
+
+
+/**
+ * Funcion para mostrar el carrito de un usuario en concreto
+ * @param integer $id_carrito id del carrito que se quiere mostrar
+ */
+function mostrar_carrito_usuario($id_carrito){
+
+    // Primero realizar la conexion a la base de datos
+    $db = conectar_db();
+
+    // Array con los parametros para la consulta
+    $array_parametros = array(":idCarrito" => $id_carrito);
+
+    // sacar todas las id de las prendas que tiene el carrito del usuario
+    try {
+
+        $consulta = $db->prepare(SELECT_CONTENIDO_CARRITO_ID);
+        $consulta->bindColumn(1, $id_prenda);
+        $consulta->execute($array_parametros);
+        if($consulta->rowCount() == 0){
+            // Si la consulta no devuelve ninguna fila no hay contenido en el carrito
+            echo<<<FIN
+                <h1>No has añadido nada a tu carrito de momento</h1>
+                <a href="../index.php">MIRAR ROPA</a>
+            FIN;
+        }else{
+            while($contenido = $consulta->fetch(PDO::FETCH_BOUND)){
+                // Ahora estoy recorriendo el contenido del carrito de un usuario
+                
+            }
+        }
+        
+    } catch (PDOException $e) {
+        echo "Error en la consulta preparada: ".$e->getMessage();
+        exit();
+    } catch(Exception $e){
+        echo "Error de excepcion no especificado: ".$e->getMessage();
+        exit();
     }
 
 }

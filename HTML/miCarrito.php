@@ -23,17 +23,18 @@
     <nav>
         <img src="./IMG/logo.png" alt="Logo de Vastion">
         <ul>
-            <li><a href="../index.php" id="actual">Inicio</a></li>
-            <li><a href="./miCarrito.php">Mi carrito</a></li>
+            <li><a href="../index.php" >Inicio</a></li>
+            <li><a href="./miCarrito.php" id="actual">Mi carrito</a></li>
             <li><a href="./miPerfil.php">Mi Perfil</a></li>
             <li><a href="./login.php">Cerrar Sesión</a></li>
         </ul>
     </nav>
     <div class="content">
         <!--Añado la informacion de la cuenta-->
-        <div class="infoPrenda">
+        <div class="carrito">
             <?php
-            devolver_prenda($_POST["id"]);
+            $id_carrito = sacar_id_carrito($_SESSION["correo"]);
+            mostrar_carrito_usuario($id_carrito);
             ?>
         </div>
     </div>

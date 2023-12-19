@@ -27,13 +27,12 @@ define("ACTUALIZAR_CANTIDAD_PRENDA", 'UPDATE contenido SET cantidad = ? WHERE ID
 
 
 // CONSULATAS DELETE
-
 define("BORRAR_PRENDA", 'DELETE FROM prenda WHERE ID = ?');
 define("BORRAR_PRENDA_CARRITO", 'DELETE FROM contenido WHERE ID_Prenda = ?');
 
 
 // Consultas SELECT
-
+define("SELECT_CONTENIDO_CARRITO_ID", 'SELECT ID_Prenda FROM contenido WHERE ID_Carrito = :idCarrito');
 define("SELECT_USUARIO_CORREO_CONTRASEÑA", 'SELECT correo, contraseña FROM usuario WHERE correo = ?');
 define("SELECT_USUARIO", 'SELECT * FROM usuario WHERE correo = ?');
 define("SELECT_PRENDAS", 'SELECT ID, nombre, marca, precio, cantidad, talla, imagen FROM prenda');

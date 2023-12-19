@@ -24,7 +24,7 @@
         <img src="HTML/IMG/logo.png" alt="Logo de Vastion">
         <ul>
             <li><a href="" id="actual">Inicio</a></li>
-            <li><a href="">Mi carrito</a></li>
+            <li><a href="./HTML/miCarrito.php">Mi carrito</a></li>
             <li><a href="./HTML/miPerfil.php">Mi Perfil</a></li>
             <li><a href="./HTML/login.php">Cerrar Sesión</a></li>
         </ul>

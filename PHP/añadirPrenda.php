@@ -16,6 +16,6 @@ $datos = [
 // Añadir la prenda, teniendo el id del carrito id de la prenda y la cantidad
 añadir_prenda_carrito($datos);
 
-header('Location: ../HTML/confirmacionAñadirPrenda.php');
+header('Location: ../index.php');
 
 ?>
