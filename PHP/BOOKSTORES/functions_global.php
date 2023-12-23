@@ -4,6 +4,25 @@ require_once('configDB.php');
 require_once('querys.php');
 // Inicio la sesion para no tenerla que abrir por cada funcion realizada
 session_start();
+// Seteo la funcion que va a controlar los errores del programa
+set_error_handler("miGestorDeErrores");
+
+
+
+/**
+ * Funcion para controlar los errores que puedan surguir
+ */
+function miGestorDeErrores($nivel, $mensaje)
+{
+    switch ($nivel) {
+        case E_ERROR:
+            echo "Error de tipo FATAL ERROR: $mensaje.<\br>";
+            break;
+        default:
+            echo "Error de tipo no especificado: $mensaje.<br />";
+            exit();
+    }
+}
 
 
 /**
@@ -250,7 +269,7 @@ function añadir_prenda_carrito($datos)
             throw new Exception("Error: no se pudo insertar la prenda al carrito", 1);
         }
 
-        actualizar_prenda($datos);
+        actualizar_prenda($datos, "restar");
 
     } catch (PDOException $e) {
         echo "error en la consulta preparada: " . $e->getMessage();
@@ -266,15 +285,24 @@ function añadir_prenda_carrito($datos)
 /**
  * Funcion para actualizar la cantidad de una prenda
  * @param array $datos contiene los datos de id y cantidad de la prenda
+ * @param STRING $operacion contiene el tipo de operacion que va a realizar en la actualizacion
  */
-function actualizar_prenda($datos)
+function actualizar_prenda($datos, $operacion)
 {
 
     $db = conectar_db();
 
     $cantidadReal = cantidad_prenda($datos[":idPrenda"]);
     // Ahora sacamos la cantidad total que quedaría de la prenda
-    $cantidadTotal = $cantidadReal - $datos[":cantidad"];
+    switch ($operacion) {
+        case "restar":
+            $cantidadTotal = $cantidadReal - $datos[":cantidad"];
+            break;
+        case "sumar":
+            $cantidadTotal = $cantidadReal + $datos[":cantidad"];
+            break;
+    }
+
 
     try {
 
@@ -374,6 +402,7 @@ function devolver_prendas()
 /**
  * Funcion para devolver una sola prenda, que será cual usuario quiera ver una de las prendas que hay mostradas
  * @param INTEGER $id id de la prenda que le usuario ha seleccionado
+ * @return Object objeto de la prenda de ropa
  */
 function devolver_prenda($id)
 {
@@ -385,25 +414,7 @@ function devolver_prenda($id)
         $consulta = $db->prepare(SELECT_PRENDA_ID);
         $consulta->bindParam(1, $id);
         $consulta->execute();
-        while ($prenda = $consulta->fetch(PDO::FETCH_OBJ)) {
-            echo <<<FIN
-            <div>
-                <img src=".$prenda->imagen" alt="$prenda->nombre"/>
-            </div>
-            <div>
-                <h1>$prenda->nombre - $prenda->marca</h1>
-                <h3>Talla - $prenda->talla || Precio - $prenda->precio €</h3>
-                <h4>Quedan $prenda->cantidad unidades</h4>
-                <form action="../PHP/añadirPrenda.php" method="post">
-                    <label>Cantidad</label>
-                    <input name="cantidad" type="number" min="1" max="$prenda->cantidad"/>
-                    <br><br>
-                    <button name="id" value="$prenda->ID">AÑADIR</button>
-                    <a href="../index.php">VOLVER</a>
-                </form>
-            </div>
-            FIN;
-        }
+        return $consulta->fetch(PDO::FETCH_OBJ);
 
     } catch (PDOException $e) {
         echo "error con la sonsulta preparada: " . $e->getMessage();
@@ -459,7 +470,8 @@ function detalles_cuenta()
  * Funcion para mostrar el carrito de un usuario en concreto
  * @param integer $id_carrito id del carrito que se quiere mostrar
  */
-function mostrar_carrito_usuario($id_carrito){
+function mostrar_carrito_usuario($id_carrito)
+{
 
     // Primero realizar la conexion a la base de datos
     $db = conectar_db();
@@ -472,25 +484,51 @@ function mostrar_carrito_usuario($id_carrito){
 
         $consulta = $db->prepare(SELECT_CONTENIDO_CARRITO_ID);
         $consulta->bindColumn(1, $id_prenda);
+        // COn esto saco la cantidad de esa prenda que el usuario ha elegido
+        $consulta->bindColumn(2, $prenda_cantidad);
         $consulta->execute($array_parametros);
-        if($consulta->rowCount() == 0){
+        if ($consulta->rowCount() == 0) {
             // Si la consulta no devuelve ninguna fila no hay contenido en el carrito
-            echo<<<FIN
-                <h1>No has añadido nada a tu carrito de momento</h1>
-                <a href="../index.php">MIRAR ROPA</a>
+            echo <<<FIN
+                <div class="sinContenido">
+                    <h1>No has añadido nada a tu carrito de momento</h1>
+                    <a href="../index.php">MIRAR ROPA</a>
+                </div>
             FIN;
-        }else{
-            while($contenido = $consulta->fetch(PDO::FETCH_BOUND)){
+        } else {
+            while ($contenido = $consulta->fetch(PDO::FETCH_BOUND)) {
                 // Ahora estoy recorriendo el contenido del carrito de un usuario
-                
+                $prenda = devolver_prenda($id_prenda);
+                $total = $prenda_cantidad * $prenda->precio;
+                echo <<<FIN
+                <div class="carrito">
+                    <div class="item">
+                        <img src=".$prenda->imagen" alt="Prenda">
+                        <div class="info">
+                            <div class="nombre">{$prenda->nombre}</div>
+                            <div class="cantidad">{$prenda_cantidad}</div>
+                            <div class="precio">{$prenda->precio}€</div>
+                            <div class="precio">Total:{$total}€</div>
+                            <a 
+                            href="../PHP/eliminarPrenda.php
+                                    ?idPrenda=$id_prenda
+                                    &idCarrito=$id_carrito
+                                    &cantidad=$prenda_cantidad" 
+                                    class="eliminar">
+                                Eliminar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                FIN;
             }
         }
-        
+
     } catch (PDOException $e) {
-        echo "Error en la consulta preparada: ".$e->getMessage();
+        echo "Error en la consulta preparada: " . $e->getMessage();
         exit();
-    } catch(Exception $e){
-        echo "Error de excepcion no especificado: ".$e->getMessage();
+    } catch (Exception $e) {
+        echo "Error de excepcion no especificado: " . $e->getMessage();
         exit();
     }
 

@@ -1,66 +1,66 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&family=Kanit:wght@300&family=Pixelify+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&family=Kanit:wght@300&family=Pixelify+Sans&display=swap");
 
-*{
-    font-family: 'Kanit', sans-serif;  
+* {
+  font-family: "Kanit", sans-serif;
 }
 
-body{
-    background-color:#8D7B68;
+body {
+  background-color: #8d7b68;
 }
 
 /* -- Aqui va el estilo de lo que es el navegador -- */
 
 nav {
-    margin-top: 1em;
-    background-color: #C8B6A6;
-    padding: 10px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    border-radius: 20px;
-    box-shadow: 0px 0px 10px 10px #584d42;
-    font-size: 1.6em;
-  }
-
-  nav img{
-    width: 150px;
-  }
-
-  nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-  }
-
-  nav li {
-    margin-right: 15px;
-  }
-
-  nav a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-    transition: font-size 0.3s;
+  margin-top: 1em;
+  background-color: #c8b6a6;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px 10px #584d42;
+  font-size: 1.6em;
 }
 
-nav a:hover{
-    color:black;
-    font-size: 1.2em;
-    transition: 0.5s;
-  }
+nav img {
+  width: 150px;
+}
 
-nav #actual{
-    color: rgb(100, 84, 14);
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav li {
+  margin-right: 15px;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  transition: font-size 0.3s;
+}
+
+nav a:hover {
+  color: black;
+  font-size: 1.2em;
+  transition: 0.5s;
+}
+
+nav #actual {
+  color: rgb(100, 84, 14);
 }
 
 /* Aqui esta el estilo del contenedor */
-.content{
-    margin-top: 2em;
-    background-color: #C8B6A6;
-    padding: 10px;
-    border-radius: 20px;
-    box-shadow: 0px 0px 10px 10px #584d42;
+.content {
+  margin-top: 2em;
+  background-color: #c8b6a6;
+  padding: 10px;
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px 10px #584d42;
 }
 
 /* Aqui esta el estilo para de como van las prendas */
@@ -68,7 +68,7 @@ nav #actual{
 .mostrarPrendas {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 .prenda {
@@ -110,7 +110,7 @@ nav #actual{
 .card-price {
   font-size: 18px;
   font-weight: bold;
-  color: #e44d26; 
+  color: #e44d26;
 }
 
 .add-button {
@@ -127,8 +127,8 @@ nav #actual{
   background-color: rgb(100, 84, 14);
 }
 
-.detallesCuenta{
-  
+/*Estilo de los detalles de la cuenta*/
+.detallesCuenta {
   text-align: center;
   justify-content: space-around;
   display: flex;
@@ -147,15 +147,14 @@ nav #actual{
     font-size: 12px;
     transition: 0.4s;
   }
-
 }
 
 /*Estilo del div del infoPrenda que muestra una sola prenda*/
-.infoPrenda{
+.infoPrenda {
   display: flex;
   justify-content: center;
 
-  & form button{
+  & form button {
     background-color: #584d42;
     color: white;
     padding: 8px 16px;
@@ -165,7 +164,7 @@ nav #actual{
     font-size: 14px;
   }
 
-  & form a{
+  & form a {
     background-color: #584d42;
     color: white;
     padding: 8px 16px;
@@ -175,8 +174,8 @@ nav #actual{
     font-size: 14px;
     text-decoration: none;
   }
-  
-  & form a:hover{
+
+  & form a:hover {
     background-color: #352e28;
     font-size: 12px;
     transition: 0.4s;
@@ -188,53 +187,95 @@ nav #actual{
     transition: 0.4s;
   }
 
-  & form input{
+  & form input {
     font-weight: bold;
     text-align: center;
     margin-left: 5px;
     border: 0px;
     border-bottom: 1px solid black;
-    background-color: #C8B6A6;
+    background-color: #c8b6a6;
   }
 
-  & form input:focus{
+  & form input:focus {
     outline: none;
   }
-
 }
 
 /*Estilo del div carrito*/
-.carrito{
-  
+.carrito {
   padding: 2em;
   text-align: center;
 
-  & a{
-    background-color: #584d42;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    text-decoration: none;
-  }
-  
-  & a:hover{
-    background-color: #352e28;
-    font-size: 12px;
-    transition: 0.4s;
+  .sinContenido {
+    a {
+      background-color: #584d42;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+
+      &:hover {
+        background-color: #352e28;
+        font-size: 12px;
+        transition: 0.4s;
+      }
+    }
   }
 
+  .item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    img {
+      max-width: 20%;
+      height: auto;
+      margin-right: 10px; /* Añadí un margen derecho para separar la imagen del texto */
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column; /* Cambié a column para apilar los textos verticalmente */
+
+      .nombre {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 3px;
+      }
+
+      .cantidad {
+        font-size: 12px;
+        margin-bottom: 3px;
+      }
+
+      .precio {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .eliminar {
+        text-decoration: none;
+        color: red;
+        font-size: 12px;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 }
 
-
 /*AQUI ESTA EL ESTILO DEL FOOTER*/
-.footer{
+.footer {
   margin-top: 4em;
   color: #555;
   display: flex;
   justify-content: space-between;
   font-size: 14px;
 }
-

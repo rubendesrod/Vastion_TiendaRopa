@@ -33,7 +33,24 @@
         <!--Añado la informacion de la cuenta-->
         <div class="infoPrenda">
             <?php
-            devolver_prenda($_POST["id"]);
+            $prenda = devolver_prenda($_POST["id"]);
+            echo <<<FIN
+            <div>
+                <img src=".$prenda->imagen" alt="$prenda->nombre"/>
+            </div>
+            <div>
+                <h1>$prenda->nombre - $prenda->marca</h1>
+                <h3>Talla - $prenda->talla || Precio - $prenda->precio €</h3>
+                <h4>Quedan $prenda->cantidad unidades</h4>
+                <form action="../PHP/añadirPrenda.php" method="post">
+                    <label>Cantidad</label>
+                    <input name="cantidad" type="number" min="1" max="$prenda->cantidad"/>
+                    <br><br>
+                    <button name="id" value="$prenda->ID">AÑADIR</button>
+                    <a href="../index.php">VOLVER</a>
+                </form>
+            </div>
+            FIN;
             ?>
         </div>
     </div>
