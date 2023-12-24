@@ -19,6 +19,7 @@
     if (comprobar_acceder_sin_logear()) {
         header("Location: ./HTML/login.php");
     }
+    unset($_SESSION["ERROR"]);
     ?>
     <nav>
         <img src="HTML/IMG/logo.png" alt="Logo de Vastion">

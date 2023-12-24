@@ -447,7 +447,7 @@ function detalles_cuenta()
                         <div><h4>Correo: </h4><p> $cuenta->correo</p></div>
                         <div><h4>Nombre: </h4> <p>$cuenta->nombre</p></div>
                         <div><h4>Apellidos: </h4> <p>$cuenta->apell1 $cuenta->apell2</p></div>
-                        <div><form action="../PHP/cambiarContra.php">
+                        <div><form action="./cambiarContra.php">
                             <button>cambiar contraseña</button>
                         </form></div>
                     </div>
