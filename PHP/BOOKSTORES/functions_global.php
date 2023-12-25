@@ -522,6 +522,13 @@ function mostrar_carrito_usuario($id_carrito)
                 </div>
                 FIN;
             }
+            echo <<<FIN
+            <div class="boton">
+                <form action="./confirmarPedido.php" method="post">
+                    <button>CONFIRMAR PEDIDO</button>
+                </form>
+            </div>
+            FIN;
         }
 
     } catch (PDOException $e) {

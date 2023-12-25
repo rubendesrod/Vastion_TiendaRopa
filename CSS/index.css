@@ -271,6 +271,49 @@ nav #actual {
   }
 }
 
+.Confirmacion-de-pedido {
+  text-align: center;
+  color: #584d42;
+
+  h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    a {
+      color: #e44d26;
+      text-decoration: none;
+      &:hover {
+        color: #352e28;
+      }
+    }
+  }
+}
+
+.boton {
+  button {
+    background-color: #584d42;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    a {
+      color: white;
+      text-decoration: none;
+    }
+  }
+
+  button:hover {
+    background-color: #352e28;
+  }
+}
+
+
 /*AQUI ESTA EL ESTILO DEL FOOTER*/
 .footer {
   margin-top: 4em;
