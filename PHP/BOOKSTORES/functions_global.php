@@ -257,20 +257,54 @@ function sacar_id_carrito($correo)
  */
 function añadir_prenda_carrito($datos)
 {
-
+    // Creo un array para verificar con los datos pasados en la funcion
+    $arrayVerificacion = array(":idCarrito" => $datos[":idCarrito"], ":idPrenda" => $datos[":idPrenda"]);
     $db = conectar_db();
-
+    
     try {
+        // Primero compruebo que la prenda que el usuario quiere añadir esta ya añadida en el carrito
+        $consulta = $db->prepare(SELECT_PRENDA_CARRITO_ID);
+        $consulta->execute($arrayVerificacion);
 
-        $consulta = $db->prepare(INSERTAR_PRENDA_CARRITO);
-        $consulta->execute($datos);
+        // Ahora compruebo que me devuelve alguna columna
+        if($consulta->rowCount() > 0){
 
-        if ($consulta->rowCount() <= 0) {
-            throw new Exception("Error: no se pudo insertar la prenda al carrito", 1);
+            // Almaceno el resultado con un array asociativo
+            $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+            // Guarda la cantidad que hay en el carrito de esa prenda
+            $cantidadPrenda = $resultado['cantidad'] + $datos[":cantidad"];
+
+            // Cierro la consulta preparada anterior
+            $consulta->closeCursor();
+
+            // La prenda esta en el carrito hay que actualizar la cantidad
+            $query = "UPDATE contenido SET cantidad = :cantidad WHERE ID_Prenda = :idPrenda";
+            $consulta = $db->prepare($query);
+
+            // Saco la cantidad de la prenda que quiero actualizar
+            $arrayActualizar = array(":cantidad" => $cantidadPrenda, ":idPrenda" => $datos[":idPrenda"]);
+            $consulta->execute($arrayActualizar);
+
+            // Actualizo la prenda con los datos mandados pero solo me resta la cantidad que se ha vuelto ha enviar
+            actualizar_prenda($datos, "restar");
+
+        }else{
+
+            // Cierro la consulta preparada anterior
+            $consulta->closeCursor();
+            
+            // La prenda no esta en el carrito hay que añadirla
+            $consulta = $db->prepare(INSERTAR_PRENDA_CARRITO);
+            $consulta->execute($datos);
+            
+            if ($consulta->rowCount() <= 0) {
+                throw new Exception("Error: no se pudo insertar la prenda al carrito", 1);
+            }
+            
+            // Actualizo los datos de la prenda restando en este caso
+            actualizar_prenda($datos, "restar");
         }
-
-        actualizar_prenda($datos, "restar");
-
+        
     } catch (PDOException $e) {
         echo "error en la consulta preparada: " . $e->getMessage();
         exit();
@@ -476,6 +510,9 @@ function mostrar_carrito_usuario($id_carrito)
     // Primero realizar la conexion a la base de datos
     $db = conectar_db();
 
+    // Seteo una varaible para el total de € del carrito
+    $totalPagar = 0;
+
     // Array con los parametros para la consulta
     $array_parametros = array(":idCarrito" => $id_carrito);
 
@@ -499,16 +536,16 @@ function mostrar_carrito_usuario($id_carrito)
             while ($contenido = $consulta->fetch(PDO::FETCH_BOUND)) {
                 // Ahora estoy recorriendo el contenido del carrito de un usuario
                 $prenda = devolver_prenda($id_prenda);
-                $total = $prenda_cantidad * $prenda->precio;
+                $totalPagar += $prenda_cantidad * $prenda->precio;
                 echo <<<FIN
                 <div class="carrito">
                     <div class="item">
                         <img src=".$prenda->imagen" alt="Prenda">
                         <div class="info">
                             <div class="nombre">{$prenda->nombre}</div>
-                            <div class="cantidad">{$prenda_cantidad}</div>
-                            <div class="precio">{$prenda->precio}€</div>
-                            <div class="precio">Total:{$total}€</div>
+                            <div class="precio">Talla: {$prenda->talla}</div>
+                            <div class="precio">Precio: {$prenda->precio}€</div>
+                            <div class="cantidad">Cantidad: {$prenda_cantidad}</div>
                             <a 
                             href="../PHP/eliminarPrenda.php
                                     ?idPrenda=$id_prenda
@@ -525,6 +562,7 @@ function mostrar_carrito_usuario($id_carrito)
             echo <<<FIN
             <div class="boton">
                 <form action="./confirmarPedido.php" method="post">
+                    <p>Total a pagar: {$totalPagar}€</p>
                     <button>CONFIRMAR PEDIDO</button>
                 </form>
             </div>

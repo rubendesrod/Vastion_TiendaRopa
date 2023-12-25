@@ -33,7 +33,7 @@
     <div class="content">
         <div class="Confirmacion-de-pedido">
             <h2>Agradecemos tu pedido</h2>
-            <p>Los detalles de tu pedido han sido enviados a tu correo electrónico. Verifica tu correo en <a
+            <p>Los detalles de tu pedido han sido enviados a tu correo electrónico.<a
                     href="https://mail.google.com/" target="_blank"><?php echo $_SESSION["correo"]?></a>.</p>
             <div class="boton">
                 <button><a href="./miCarrito.php">Volver a mi carrito</a></button>

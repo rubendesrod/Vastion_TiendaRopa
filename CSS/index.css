@@ -203,9 +203,9 @@ nav #actual {
 
 /*Estilo del div carrito*/
 .carrito {
-  padding: 2em;
+  padding: 1em;
+  align-items: center;
   text-align: center;
-
   .sinContenido {
     a {
       background-color: #584d42;
@@ -224,21 +224,18 @@ nav #actual {
       }
     }
   }
-
   .item {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
-
+    flex-direction: row;
     img {
-      max-width: 20%;
+      max-width: 10%;
       height: auto;
       margin-right: 10px; /* Añadí un margen derecho para separar la imagen del texto */
     }
-
     .info {
       display: flex;
-      flex-direction: column; /* Cambié a column para apilar los textos verticalmente */
+      flex-direction: column;
 
       .nombre {
         font-size: 16px;
