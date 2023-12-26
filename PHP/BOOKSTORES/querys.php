@@ -20,6 +20,7 @@ define("ACTUALZIAR_PRENDA_PRECIO", 'UPDATE prenda SET precio = ? WHERE ID = ?');
 define("ACTUALZIAR_PRENDA_CANTIDAD", 'UPDATE prenda SET cantidad = ? WHERE ID = ?');
 define("ACTUALZIAR_PRENDA_TALLA", 'UPDATE prenda SET talla = ? WHERE ID = ?');
 define("ACTUALZIAR_PRENDA_IMAGEN", 'UPDATE prenda SET imagen = ? WHERE ID = ?');
+define("ACTUALIZAR_PRENDA_CANTIDADPRECIO", 'UPDATE prenda SET precio = :precio ,cantidad = :cantidad WHERE ID = :id');
 
 define("ACTUALIZAR_CANTIDAD_PRENDA", 'UPDATE contenido SET cantidad = ? WHERE ID_Prenda = ? AND ID_Carrito = ?');
 

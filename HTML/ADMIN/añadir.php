@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADMIN</title>
-    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="../../CSS/admin.css" />
     <link rel="shortcut icon" href="admin_29358.ico" type="image/x-icon">
     <?php
         // Importo la libreria
@@ -65,7 +65,7 @@
                 </div>
                 <div class="cantidad">
                     <label for="cantidad">Cantidad</label>
-                    <input type="number" name="cantidad" id="cantidad" />
+                    <input type="number" min="0" name="cantidad" id="cantidad" />
                 </div>
                 <div class="precio">
                     <label for="precio">Precio</label>

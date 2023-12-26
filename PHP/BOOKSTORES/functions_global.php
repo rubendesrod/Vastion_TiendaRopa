@@ -637,3 +637,75 @@ function mostrar_carrito_usuario($id_carrito)
     }
 
 }
+
+
+
+/**
+ * Funcion para mostrar las prendas en la tabla del administrador
+ */
+function mostar_tabla_administrador()
+{
+
+    // Realizo la conexion a la base de datos
+    $db = conectar_db();
+
+    // Parámetros de paginación
+    $elementosPorPagina = 5;
+    $paginaActual = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
+    $offset = ($paginaActual - 1) * $elementosPorPagina;
+
+    try {
+        // nombre, marca, precio, cantidad, talla, imagen
+        $consulta = $db->prepare(SELECT_PRENDAS . " LIMIT :elementosPorPagina OFFSET :offset");
+        $consulta->bindParam(':elementosPorPagina', $elementosPorPagina, PDO::PARAM_INT);
+        $consulta->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $consulta->bindColumn(1, $id);
+        $consulta->bindColumn(2, $nombre);
+        $consulta->bindColumn(3, $marca);
+        $consulta->bindColumn(4, $precio);
+        $consulta->bindColumn(5, $cantidad);
+        $consulta->bindColumn(6, $talla);
+        $consulta->bindColumn(7, $imagen);
+        $consulta->execute();
+
+        // Obtener nombres de columnas
+        $numColumnas = $consulta->columnCount();
+        $nombresColumnas = [];
+        echo "<table><tr>";
+        for ($i = 0; $i < $numColumnas; $i++) {
+            $columna = $consulta->getColumnMeta($i);
+            echo "<th>" . $columna['name'] . "</th>";
+        }
+        echo "</tr>";
+
+        // Saco fila por cada prenda que hay en la base de datos
+        while ($prenda = $consulta->fetch(PDO::FETCH_BOUND)) {
+            echo <<<FIN
+                <tr>
+                    <td>$id</td>
+                    <td>$nombre</td>
+                    <td>$marca</td>
+                    <td><input type="number" min="0" name="precio[$id]" step="any" value="$precio"/></td>
+                    <td><input type="number" min="0" name="cantidad[$id]" value="$cantidad"/></td>
+                    <td>$talla</td>
+                    <td>$imagen</td>   
+                    <td><button name="id" value="$id">Modificar</button></td>
+                </tr>
+            FIN;
+        }
+
+        echo "</div></table></div>";
+        // Agregar enlaces de paginación
+        $totalElementos = $db->query("SELECT count(*) FROM prenda")->fetchColumn();
+        // saco el total de elemento con el total de elemento que tengo y los elementos que quiero por pagina
+        $totalPaginas = ceil($totalElementos / $elementosPorPagina);
+        echo "<div class='paginas'>";
+        for ($i = 1; $i <= $totalPaginas; $i++) {
+            echo '<a href="?pagina=' . $i . '">' . $i . '</a> ';
+        }
+
+    } catch (PDOException $e) {
+        echo "La consulta no se ha realizado correctamente:<br>" . $e->getMessage();
+    }
+
+}

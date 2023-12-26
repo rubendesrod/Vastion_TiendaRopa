@@ -5,18 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADMIN</title>
-    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="../../CSS/admin.css" />
     <link rel="shortcut icon" href="admin_29358.ico" type="image/x-icon">
     <?php
-        // Importo la libreria
-        require_once("../../PHP/bookstores/functions_global.php");
-        
-        // Compruebo que el que haya iniciado sesion sea el administrador
-        if(!isset($_SESSION["admin"])){
-            // Si no es el administrador lo mando al login
-            header("Location: ../login.php");
-        }
-        // Si que esta entrado un administrados sigue la ejecución
+    // Importo la libreria
+    require_once("../../PHP/bookstores/functions_global.php");
+
+    // Compruebo que el que haya iniciado sesion sea el administrador
+    if (!isset($_SESSION["admin"])) {
+        // Si no es el administrador lo mando al login
+        header("Location: ../login.php");
+    }
+    // Si que esta entrado un administrados sigue la ejecución
     ?>
 </head>
 
@@ -38,73 +38,25 @@
             <div>
                 <h2>Almacen de las prendas</h2>
             </div>
-            <div class="busqueda">
-                <form action="#">
-                    <input type="text" name="marca" placeholder="Escribe la marca de ropa" />
-                    <button type="submit">buscar</button>
-                </form>
-            </div>
-            <div class="tablaPrendas">
-                <table>
-                    <!--Titulo de las columnas de la tabla-->
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Marca</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                        <th>Talla</th>
-                        <th>Imagen</th>
-                    </tr>
-                    <!--Contenido de las prendas-->
-                    <tr>
-                        <td>1</td>
-                        <td>Polo</td>
-                        <td>Versacce</td>
-                        <td>60.00€</td>
-                        <td>12</td>
-                        <td>XS</td>
-                        <td>./IMG/polo_versacce.png</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Polo</td>
-                        <td>Versacce</td>
-                        <td>60.00€</td>
-                        <td>12</td>
-                        <td>XS</td>
-                        <td>./IMG/polo_versacce.png</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Polo</td>
-                        <td>Versacce</td>
-                        <td>60.00€</td>
-                        <td>12</td>
-                        <td>XS</td>
-                        <td>./IMG/polo_versacce.png</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Polo</td>
-                        <td>Versacce</td>
-                        <td>60.00€</td>
-                        <td>12</td>
-                        <td>XS</td>
-                        <td>./IMG/polo_versacce.png</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Polo</td>
-                        <td>Versacce</td>
-                        <td>60.00€</td>
-                        <td>12</td>
-                        <td>XS</td>
-                        <td>./IMG/polo_versacce.png</td>
-                    </tr>
-                </table>
-            </div>
+            <form action="../../PHP/modificarPrenda.php" method="post">
+                <div class="tablaPrendas">
+                    <?php
+                    mostar_tabla_administrador();
+                    ?>
+            </form>
         </div>
+        <?php
+        unset($_POST);
+        if (isset($_SESSION["ERROR"])) {
+            echo <<<FIN
+                        <div class="error">
+                            <p>{$_SESSION["ERROR"]}</p>
+                        </div>
+                    FIN;
+            unset($_SESSION["ERROR"]);
+        }
+        ?>
+    </div>
     </div>
 </body>
 
