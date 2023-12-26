@@ -36,8 +36,10 @@
         $destino = "jeuerjeux6@gmail.com";
         $asunto = "Confirmacion de la compra";
         $cuerpo = <<<FIN
+                <div bgcolor="blue">
                     <h1 color="#555">Tu pedido ha sido registrado correctamente</h1>
-                    <p>Esparamos que vuelva a comprar en nuestra página</p>
+                    <p style="font-weight:bold;">Esparamos que vuelva a comprar en nuestra página $email</p>
+                </div>
                 FIN;
         
         // Estas etiquetas son para el envío en formato HTML
