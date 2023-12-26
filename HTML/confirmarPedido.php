@@ -29,12 +29,37 @@
             <li><a href="./login.php">Cerrar Sesión</a></li>
         </ul>
     </nav>
+    <!--Aqui se va a realizar el envio del correo al usuario-->
+    <?php
+        // Seteo las variable
+        $email = $_SESSION["correo"];
+        $destino = "jeuerjeux6@gmail.com";
+        $asunto = "Confirmacion de la compra";
+        $cuerpo = <<<FIN
+                    <h1 color="#555">Tu pedido ha sido registrado correctamente</h1>
+                    <p>Esparamos que vuelva a comprar en nuestra página</p>
+                FIN;
+        
+        // Estas etiquetas son para el envío en formato HTML
+        $headers = "MIME-Version: 1.0\r\n";
+        $headers .= "Content-type: text/html; charset=utf-8\rn\n";
+
+        // Direcion del remitente
+        $headers .= "From: $email\r\n";
+
+        // Ruta del mensaje desde origen a destino
+        $headers .= "Return-path: $destino\r\n";
+
+        // envio del email;
+        mail($destino, $asunto, $cuerpo, $headers);
+
+    ?>
     <!--Primero muestro el mensaje de confirmacion-->
     <div class="content">
         <div class="Confirmacion-de-pedido">
             <h2>Agradecemos tu pedido</h2>
             <p>Los detalles de tu pedido han sido enviados a tu correo electrónico.<a
-                    href="https://mail.google.com/" target="_blank"><?php echo $_SESSION["correo"]?></a>.</p>
+                    href="https://mail.google.com/" target="_blank"><?php echo $email?></a>.</p>
             <div class="boton">
                 <button><a href="./miCarrito.php">Volver a mi carrito</a></button>
             </div>
@@ -46,7 +71,7 @@
     $db = conectar_db();
     // Realizamos la consulta preparada para borrar el contenido del carrito del usuario
     try {
-        $id_carrito = sacar_id_carrito($_SESSION["correo"]);
+        $id_carrito = sacar_id_carrito($email);
         // Realizo la transaccion
         $db->beginTransaction();
         $consulta = $db->prepare(BORRAR_CONTENIDO_USUARIO);
