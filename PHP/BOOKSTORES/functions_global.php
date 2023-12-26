@@ -132,7 +132,8 @@ function iniciar_login($datos)
  * @param array $datos array asociativo que contiene los datos para realizar el logeo del administrador
  * @return BOOLEAN devuelve 1 o 0 / 1 si el logeo es correcto o 0 si no lo es
  */
-function inicar_logeo_admin($datos){
+function inicar_logeo_admin($datos)
+{
 
     // Seteo la variable que voy a usar como flag
     $exito = 0;
@@ -144,26 +145,26 @@ function inicar_logeo_admin($datos){
     // hago la conexion con la base de datos
     $db = conectar_db();
     try {
-        
+
         // Realizo la consulta preparada
         $consulta = $db->prepare(SELECT_ADMIN);
         $consulta->execute();
         $admin = $consulta->fetch(PDO::FETCH_OBJ);
         // Primero compruebo el correo
-        if($correo == $admin->correo){
+        if ($correo == $admin->correo) {
             // Compruebo la contraseña
-            if($contra == $admin->contraseña){
+            if ($contra == $admin->contraseña) {
                 $exito = 1;
             }
         }
         return $exito;
 
     } catch (PDOException $e) {
-        echo "Error pdoException: ".$e->getMessage();
-    }catch (Exception $e){
-        echo "Error Exception: ".$e->getMessage();
+        echo "Error pdoException: " . $e->getMessage();
+    } catch (Exception $e) {
+        echo "Error Exception: " . $e->getMessage();
     }
-    
+
 }
 
 
@@ -301,14 +302,14 @@ function añadir_prenda_carrito($datos)
     // Creo un array para verificar con los datos pasados en la funcion
     $arrayVerificacion = array(":idCarrito" => $datos[":idCarrito"], ":idPrenda" => $datos[":idPrenda"]);
     $db = conectar_db();
-    
+
     try {
         // Primero compruebo que la prenda que el usuario quiere añadir esta ya añadida en el carrito
         $consulta = $db->prepare(SELECT_PRENDA_CARRITO_ID);
         $consulta->execute($arrayVerificacion);
 
         // Ahora compruebo que me devuelve alguna columna
-        if($consulta->rowCount() > 0){
+        if ($consulta->rowCount() > 0) {
 
             // Almaceno el resultado con un array asociativo
             $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
@@ -329,23 +330,23 @@ function añadir_prenda_carrito($datos)
             // Actualizo la prenda con los datos mandados pero solo me resta la cantidad que se ha vuelto ha enviar
             actualizar_prenda($datos, "restar");
 
-        }else{
+        } else {
 
             // Cierro la consulta preparada anterior
             $consulta->closeCursor();
-            
+
             // La prenda no esta en el carrito hay que añadirla
             $consulta = $db->prepare(INSERTAR_PRENDA_CARRITO);
             $consulta->execute($datos);
-            
+
             if ($consulta->rowCount() <= 0) {
                 throw new Exception("Error: no se pudo insertar la prenda al carrito", 1);
             }
-            
+
             // Actualizo los datos de la prenda restando en este caso
             actualizar_prenda($datos, "restar");
         }
-        
+
     } catch (PDOException $e) {
         echo "error en la consulta preparada: " . $e->getMessage();
         exit();
@@ -436,11 +437,17 @@ function devolver_prendas()
     // Inicio la conexion a la base de datos
     $db = conectar_db();
 
-    // Realizo la consulta preparada
-    try {
+    // Parámetros de paginación
+    $elementosPorPagina = 5;
+    $paginaActual = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
+    $offset = ($paginaActual - 1) * $elementosPorPagina;
 
+    // Realizo la consulta preparada con LIMIT y OFFSET
+    try {
         // nombre, marca, precio, cantidad, talla, imagen
-        $consulta = $db->query(SELECT_PRENDAS);
+        $consulta = $db->prepare(SELECT_PRENDAS . " LIMIT :elementosPorPagina OFFSET :offset");
+        $consulta->bindParam(':elementosPorPagina', $elementosPorPagina, PDO::PARAM_INT);
+        $consulta->bindParam(':offset', $offset, PDO::PARAM_INT);
         $consulta->bindColumn(1, $id);
         $consulta->bindColumn(2, $nombre);
         $consulta->bindColumn(3, $marca);
@@ -448,29 +455,40 @@ function devolver_prendas()
         $consulta->bindColumn(5, $cantidad);
         $consulta->bindColumn(6, $talla);
         $consulta->bindColumn(7, $imagen);
+        $consulta->execute();
+
         while ($prenda = $consulta->fetch(PDO::FETCH_BOUND)) {
             if ($cantidad > 0) {
                 echo <<<FIN
-                <div class="prenda">
-                    <img class="card-img" src="./HTML$imagen" alt="$nombre-$marca"/>
-                    <hr>
-                    <div class="card-info">
-                        <p class="card-title">$nombre - $marca</p>
-                        <p class="card-details">$cantidad - Talla: $talla</p>
-                        <p class="card-price">$precio €</p>
-                        <form action="./HTML/infoPrenda.php" method="post">
+            <div class="prenda">
+                <img class="card-img" src="./HTML$imagen" alt="$nombre-$marca"/>
+                <hr>
+                <div class="card-info">
+                    <p class="card-title">$nombre - $marca</p>
+                    <p class="card-details">$cantidad - Talla: $talla</p>
+                    <p class="card-price">$precio €</p>
+                    <form action="./HTML/infoPrenda.php" method="post">
                         <button class="add-button" name="id" value="$id">VER</button>
-                        </form>
-                    </div>
+                    </form>
                 </div>
-                FIN;
+            </div>
+            FIN;
             }
         }
 
+        // Agregar enlaces de paginación
+        $totalElementos = $db->query("SELECT count(*) FROM prenda")->fetchColumn();
+        // saco el total de elemento con el total de elemento que tengo y los elementos que quiero por pagina
+        $totalPaginas = ceil($totalElementos / $elementosPorPagina);
+        echo "</div><div class='paginas'>";
+        for ($i = 1; $i <= $totalPaginas; $i++) {
+            echo '<a href="?pagina=' . $i . '">' . $i . '</a> ';
+        }
 
     } catch (PDOException $e) {
-        echo "La conulsta no se ha realizado correctamente:<br>" . $e->getMessage();
+        echo "La consulta no se ha realizado correctamente:<br>" . $e->getMessage();
     }
+
 
 }
 

@@ -71,6 +71,27 @@ nav #actual {
   margin-bottom: 20px;
 }
 
+.paginas {
+  text-align: center;
+  a {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #584d42;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.5s, transform 0.5s ;
+    &:hover{
+      transform: translateY(8px);
+      background-color: #494037;
+    }
+
+  }
+}
+
 .prenda {
   border: 2px solid #584d42;
   border-radius: 8px;
@@ -309,7 +330,6 @@ nav #actual {
     background-color: #352e28;
   }
 }
-
 
 /*AQUI ESTA EL ESTILO DEL FOOTER*/
 .footer {
