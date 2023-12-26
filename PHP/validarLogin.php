@@ -10,13 +10,21 @@ $datos = [
     "contraseña" => htmlspecialchars($_POST['pass'])
 ];
 
-// Relizo la funcion del login si se logea le llevará al index si no al mismo formulario
-if (iniciar_login($datos)) {
-    $_SESSION["login"] = true;
-    header('Location: ../index.php');
+// Antes de iniciar sesion voy a comprobar que el que intenta acceder no es el administrador
+if (inicar_logeo_admin($datos)) {
+    $_SESSION["admin"] = "ok";
+    header("Location: ../HTML/ADMIN/modificar.php");
 } else {
-    header('Location: ../HTML/login.php');
+    // Relizo la funcion del login si se logea le llevará al index si no al mismo formulario
+    if (iniciar_login($datos)) {
+        $_SESSION["login"] = true;
+        header('Location: ../index.php');
+    } else {
+        header('Location: ../HTML/login.php');
+    }
 }
+
+
 ;
 
 ?>

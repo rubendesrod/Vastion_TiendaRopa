@@ -68,7 +68,7 @@ function comprobar_acceder_sin_logear()
 
 
 /**
- * Funcion para realizar el envio del login y también se comprobará si el que intenta inicar es el admin
+ * Funcion para realizar el envio del login
  * @param array $datos array asciativo que contiene los datos del login
  * @return exito devuelve un 1 si el logeo es correcto o 0 si el logeo no es correcto
  */
@@ -123,6 +123,47 @@ function iniciar_login($datos)
 
     $conexion->close();
     return $exito;
+}
+
+
+
+/**
+ * Funcion para comprobar que el que inicia la sesion no es el administrador
+ * @param array $datos array asociativo que contiene los datos para realizar el logeo del administrador
+ * @return BOOLEAN devuelve 1 o 0 / 1 si el logeo es correcto o 0 si no lo es
+ */
+function inicar_logeo_admin($datos){
+
+    // Seteo la variable que voy a usar como flag
+    $exito = 0;
+
+    // Seteo las variables del array
+    $correo = $datos["correo"];
+    $contra = $datos["contraseña"];
+
+    // hago la conexion con la base de datos
+    $db = conectar_db();
+    try {
+        
+        // Realizo la consulta preparada
+        $consulta = $db->prepare(SELECT_ADMIN);
+        $consulta->execute();
+        $admin = $consulta->fetch(PDO::FETCH_OBJ);
+        // Primero compruebo el correo
+        if($correo == $admin->correo){
+            // Compruebo la contraseña
+            if($contra == $admin->contraseña){
+                $exito = 1;
+            }
+        }
+        return $exito;
+
+    } catch (PDOException $e) {
+        echo "Error pdoException: ".$e->getMessage();
+    }catch (Exception $e){
+        echo "Error Exception: ".$e->getMessage();
+    }
+    
 }
 
 

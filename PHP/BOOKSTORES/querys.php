@@ -2,7 +2,7 @@
 
 // CONSULTAS INSERT
 define("INSERTAR_USUARIO", 'INSERT INTO usuario VALUES (?,?,?,?,?)');
-define("INSERTAR_PRENDA", 'INSERT INTO prenda VALUES(?,?,?,?,?,?, "admin@gmail.com")');
+define("INSERTAR_PRENDA", 'INSERT INTO prenda(nombre, marca, precio, cantidad, talla, imagen, ID_ADMIN) VALUES(:nombre, :marca, :precio, :cantidad, :talla, :imagen, :ID_ADMIN)');
 define("INSERTAR_CARRITO", 'INSERT INTO carrito(correo_usuario) VALUES(?)');
 define("INSERTAR_CONTENIDO", 'INSERT INTO contenido VALUES(?, ?, ?)');
 define("INSERTAR_PRENDA_CARRITO", 'INSERT INTO contenido VALUES (:idCarrito, :idPrenda, :cantidad)');
@@ -38,5 +38,6 @@ define("SELECT_USUARIO", 'SELECT * FROM usuario WHERE correo = ?');
 define("SELECT_PRENDAS", 'SELECT ID, nombre, marca, precio, cantidad, talla, imagen FROM prenda');
 define("SELECT_PRENDA_ID", 'SELECT * FROM prenda WHERE ID = ?');
 define("SELECT_ID_CARRITO", 'SELECT id FROM carrito WHERE correo_usuario = ?');
+define("SELECT_ADMIN", "SELECT * FROM administrador");
 
 ?>

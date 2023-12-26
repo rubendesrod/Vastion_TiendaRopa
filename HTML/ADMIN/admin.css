@@ -1,0 +1,193 @@
+* {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: rgb(5, 173, 224);
+  h1 {
+    color: whitesmoke;
+    font-weight: bold;
+    font-size: 2em;
+  }
+}
+
+.content {
+  background-color: whitesmoke;
+  width: 60em;
+  margin: 2em;
+  padding: 2em;
+  border: 5px solid rgb(0, 132, 255);
+  border-radius: 30px;
+  /*estilo para el div de errores*/
+  .error{
+    color: red;
+  }
+  /*Estilo de los controles que manejan lo que quiere conseguir el administrador*/
+  .controles {
+    margin: 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    .boton {
+      margin-right: 2em;
+      a {
+        display: inline-block;
+        color: black;
+        text-decoration: none;
+        border-radius: 5px;
+        border: 3px solid rgb(0, 132, 255);
+        padding: 5px;
+        transition: border-radius 0.2s, background-color 0.5s,
+          transform 0.3s ease-in-out;
+        &:hover {
+          background-color: rgb(204, 204, 204);
+          transform: translateY(-6px);
+          border-radius: 17px;
+        }
+      }
+      #actual{
+        transform: translateY(-8px);
+      }
+    }
+  }
+  /*Estilo para el contenido de cuando quiera subir una nueva prenda el admin*/
+  .contenido {
+    text-align: center;
+    h2 {
+      margin: 2em;
+      font-size: 1.5em;
+      color: rgb(0, 132, 255);
+    }
+    /*Para todos los inputs dentro del div*/
+    div {
+      margin: 2em;
+      input {
+        margin-left: 20px;
+        background-color: whitesmoke;
+        border: none;
+        border-bottom: 3px solid rgb(0, 195, 255);
+        &:focus {
+          outline: none;
+        }
+        /*Para los inputs que sean tipo de numero*/
+        &[type="number"] {
+          width: 4em;
+        }
+      }
+      /*Para los que sean de tipo select*/
+      select {
+        border: none;
+        margin-left: 20px;
+        border-radius: 4px;
+        color: whitesmoke;
+        background-color: rgb(0, 132, 255);
+        padding: 0.4em;
+        &:hover {
+          background-color: rgb(2, 108, 206);
+          cursor: pointer;
+          outline: none;
+        }
+      }
+    }
+    /*Para el div con la clase .archivos*/
+    .archivos {
+      #selecc {
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        left: 0;
+      }
+      #labelUpload {
+        display: inline-block;
+        background-color: rgb(0, 132, 255);
+        padding: 0.4em;
+        color: whitesmoke;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s ease-in-out;
+        &:hover {
+          background-color: rgb(204, 204, 204);
+          transform: translateY(-5px);
+        }
+      }
+    }
+    .mandarDatos {
+      button {
+        border-radius: 5px;
+        border: 3px solid rgb(0, 132, 255);
+        padding: 5px;
+        transition: background-color 0.3s, transform 0.3s ease-in-out;
+        &:hover {
+          background-color: rgb(204, 204, 204);
+          transform: translateY(-5px);
+        }
+      }
+    }
+  }
+  /*Estilo para el contenido que se tiene que mostrar en forma de tabla de las prendas*/
+  .contenido2 {
+    font-size: 1.4em;
+    h2 {
+      margin: 2em;
+      font-size: 1.5em;
+      color: rgb(0, 132, 255);
+    }
+    /*Para el div que contiene la busqueda*/
+    .busqueda {
+      display: flex;
+      button {
+        font-size: 0.7em;
+        border: none;
+        margin-left: 1em;
+        display: inline-block;
+        background-color: rgb(0, 132, 255);
+        padding: 0.4em;
+        color: whitesmoke;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+        &:hover {
+          background-color: rgb(204, 204, 204);
+        }
+      }
+      input {
+        font-size: 0.8em;
+        margin-left: 3em;
+        width: 13em;
+        margin-left: 20px;
+        background-color: whitesmoke;
+        border: none;
+        border-bottom: 3px solid rgb(0, 195, 255);
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+    /*Para el siguiente div que va a contener la tabla de las prendas*/
+    .tablaPrendas {
+      display: flex;
+      justify-content: center;
+      table {
+        margin-top: 1.5em;
+        width: 100%;
+        th {
+          border-bottom: 5px solid rgb(0, 195, 255);
+        }
+        /* Aplica a todas las filas impares */
+        tr:nth-child(odd) {
+          background-color: whitesmoke;
+        }
+
+        /* Aplica a todas las filas pares */
+        tr:nth-child(even) {
+          background-color: #d4d4d4; /* o cualquier otro tono ligeramente más oscuro de blanco */
+        }
+      }
+    }
+  }
+}
