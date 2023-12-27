@@ -82,7 +82,12 @@ VALUES
     (2,'Polo', 'Versacce', '60€', '5', 'L', '/IMG/polo_verssace.png', 'admin@gmail.com'),
     (3,'Polo', 'Ralph Lauren', '68€', '10', 'XS', '/IMG/polo_RalpLauren.png', 'admin@gmail.com'),
     (4,'Polo', 'Ralph Lauren', '72€', '3', 'M', '/IMG/polo_RalpLauren.png','admin@gmail.com'),
-    (5,'Chandal', 'Ralph Lauren', '102€', '12', 'S', '/IMG/chandal_ralphLauren.png', 'admin@gmail.com');
+    (5,'Chandal', 'Ralph Lauren', '102€', '12', 'S', '/IMG/chandal_ralphLauren.png', 'admin@gmail.com'),
+    (6,'Chandal', 'Nike Tech', '220€', '16', 'L', '/IMG/nikeTech.png', 'admin@gmail.com'),
+    (7,'Cazadora', 'Trapstar', '413€', '6', 'S', '/IMG/trapstarCazadora.png', 'admin@gmail.com'),
+    (8,'Cazadora', 'Nike Nocta', '300€', '4', 'S', '/IMG/NikeNocta.png', 'admin@gmail.com'),
+    (9,'Sudadera', 'Ami Paris', '90€', '13', 'L', '/IMG/SudaderaAmi.png', 'admin@gmail.com'),
+    (10,'Camiseta', 'Balenciaga', '74€', '13', 'XXL', '/IMG/CamisetaBalenciaga.png', 'admin@gmail.com');
 
 
 -- INSERT CARRITO
