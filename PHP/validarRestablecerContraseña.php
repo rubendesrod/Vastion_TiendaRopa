@@ -16,7 +16,7 @@ if (isset($_POST["pass"]) && isset($_POST["passRep"])) {
     $passRep = $_POST["passRep"];
 
     // Compruebo que ninguno de los campos esta vacia
-    if ($pass != "" || $passRep != "") {
+    if ($pass != "" && $passRep != "") {
         // Compruebo que las contraseñas son iguales
         if ($pass == $passRep) {
             // Se puede actualizar la contraseña del usuario

@@ -1,7 +1,7 @@
 <?php
 // Patrones
-define('EMAIL', '/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/');
-define('CONTRA','/^[A-z]{4,}\d*$/');
-define('NAME','/^[A-Z[a-z]{3,}$/');
-define('APELL','/[A-z]{3,}/');
+define('EMAIL', '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/');
+define('CONTRA','/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!$%@#£€*?&]{8,}$/');
+define('NAME','/^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/');
+define('APELL','/^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/');
 ?>

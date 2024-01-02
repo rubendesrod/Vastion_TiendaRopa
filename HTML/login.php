@@ -25,7 +25,7 @@
                     <input type="password" name="pass" id="pass" required>
                 </div>
                 <div class="form-registrar">
-                    <p>No tengo cuenta <a href="register.html">Registrarme</a></p>
+                    <p>No tengo cuenta <a href="register.php">Registrarme</a></p>
                 </div>
                 <div class="form-acceder">
                     <button type="submit">login</button>
