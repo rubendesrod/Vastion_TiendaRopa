@@ -158,13 +158,11 @@ function inicar_logeo_admin($datos)
             }
         }
         return $exito;
-
     } catch (PDOException $e) {
         echo "Error pdoException: " . $e->getMessage();
     } catch (Exception $e) {
         echo "Error Exception: " . $e->getMessage();
     }
-
 }
 
 
@@ -257,7 +255,6 @@ function crear_carrito($correo_usuario)
     }
 
     return $exito;
-
 }
 
 
@@ -282,13 +279,11 @@ function sacar_id_carrito($correo)
         $consulta->fetch(PDO::FETCH_BOUND);
 
         return $id;
-
     } catch (PDOException $e) {
         echo "error en la consulta preparada: " . $e->getMessage();
     } catch (Exception $e) {
         echo "errpr de excepcion no expecificado: " . $e->getMessage();
     }
-
 }
 
 
@@ -329,7 +324,6 @@ function añadir_prenda_carrito($datos)
 
             // Actualizo la prenda con los datos mandados pero solo me resta la cantidad que se ha vuelto ha enviar
             actualizar_prenda($datos, "restar");
-
         } else {
 
             // Cierro la consulta preparada anterior
@@ -346,7 +340,6 @@ function añadir_prenda_carrito($datos)
             // Actualizo los datos de la prenda restando en este caso
             actualizar_prenda($datos, "restar");
         }
-
     } catch (PDOException $e) {
         echo "error en la consulta preparada: " . $e->getMessage();
         exit();
@@ -386,7 +379,6 @@ function actualizar_prenda($datos, $operacion)
         $query->bindParam(1, $cantidadTotal);
         $query->bindParam(2, $datos[":idPrenda"]);
         $query->execute();
-
     } catch (PDOException $e) {
         echo "error en la consulta preparada: " . $e->getMessage();
         exit();
@@ -415,7 +407,6 @@ function cantidad_prenda($id_prenda)
         $consulta->execute();
         $pr = $consulta->fetch(PDO::FETCH_OBJ);
         return $pr->cantidad;
-
     } catch (PDOException $e) {
         echo "error en la consulta preparada: " . $e->getMessage();
         exit();
@@ -423,7 +414,6 @@ function cantidad_prenda($id_prenda)
         echo "error de exception no identificado: " . $e->getMessage();
         exit();
     }
-
 }
 
 
@@ -458,8 +448,7 @@ function devolver_prendas()
         $consulta->execute();
 
         while ($prenda = $consulta->fetch(PDO::FETCH_BOUND)) {
-            if ($cantidad > 0) {
-                echo <<<FIN
+            echo <<<FIN
             <div class="prenda">
                 <img class="card-img" src="./HTML$imagen" alt="$nombre-$marca"/>
                 <hr>
@@ -473,23 +462,19 @@ function devolver_prendas()
                 </div>
             </div>
             FIN;
-            }
         }
 
         // Agregar enlaces de paginación
-        $totalElementos = $db->query("SELECT count(*) FROM prenda")->fetchColumn();
+        $totalElementos = $db->query("SELECT count(*) FROM prenda WHERE cantidad > 0")->fetchColumn();
         // saco el total de elemento con el total de elemento que tengo y los elementos que quiero por pagina
         $totalPaginas = ceil($totalElementos / $elementosPorPagina);
         echo "</div><div class='paginas'>";
         for ($i = 1; $i <= $totalPaginas; $i++) {
             echo '<a href="?pagina=' . $i . '">' . $i . '</a> ';
         }
-
     } catch (PDOException $e) {
         echo "La consulta no se ha realizado correctamente:<br>" . $e->getMessage();
     }
-
-
 }
 
 /**
@@ -508,13 +493,11 @@ function devolver_prenda($id)
         $consulta->bindParam(1, $id);
         $consulta->execute();
         return $consulta->fetch(PDO::FETCH_OBJ);
-
     } catch (PDOException $e) {
         echo "error con la sonsulta preparada: " . $e->getMessage();
     } catch (Exception $e) {
         echo "Error de expcepcion no expecificado: " . $e->getMessage();
     }
-
 }
 
 
@@ -548,13 +531,11 @@ function detalles_cuenta()
                 }
             }
         }
-
     } catch (PDOException $e) {
         echo "Error en la preparación de la consulta" . $e->getMessage();
     } catch (Exception $e) {
         echo "Error no especificado de excepcion" . $e->getMessage();
     }
-
 }
 
 
@@ -627,7 +608,6 @@ function mostrar_carrito_usuario($id_carrito)
             </div>
             FIN;
         }
-
     } catch (PDOException $e) {
         echo "Error en la consulta preparada: " . $e->getMessage();
         exit();
@@ -635,7 +615,6 @@ function mostrar_carrito_usuario($id_carrito)
         echo "Error de excepcion no especificado: " . $e->getMessage();
         exit();
     }
-
 }
 
 
@@ -703,9 +682,7 @@ function mostar_tabla_administrador()
         for ($i = 1; $i <= $totalPaginas; $i++) {
             echo '<a href="?pagina=' . $i . '">' . $i . '</a> ';
         }
-
     } catch (PDOException $e) {
         echo "La consulta no se ha realizado correctamente:<br>" . $e->getMessage();
     }
-
 }

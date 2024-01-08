@@ -36,7 +36,7 @@ define("SELECT_CONTENIDO_CARRITO_ID", 'SELECT ID_Prenda, cantidad  FROM contenid
 define("SELECT_PRENDA_CARRITO_ID", 'SELECT cantidad FROM contenido WHERE ID_Carrito = :idCarrito AND ID_Prenda = :idPrenda');
 define("SELECT_USUARIO_CORREO_CONTRASEÑA", 'SELECT correo, contraseña FROM usuario WHERE correo = ?');
 define("SELECT_USUARIO", 'SELECT * FROM usuario WHERE correo = ?');
-define("SELECT_PRENDAS", 'SELECT ID, nombre, marca, precio, cantidad, talla, imagen FROM prenda');
+define("SELECT_PRENDAS", 'SELECT ID, nombre, marca, precio, cantidad, talla, imagen FROM prenda WHERE cantidad > 0');
 define("SELECT_PRENDA_ID", 'SELECT * FROM prenda WHERE ID = ?');
 define("SELECT_ID_CARRITO", 'SELECT id FROM carrito WHERE correo_usuario = ?');
 define("SELECT_ADMIN", "SELECT * FROM administrador");

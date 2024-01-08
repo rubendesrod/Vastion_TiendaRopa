@@ -31,37 +31,36 @@
     </nav>
     <!--Aqui se va a realizar el envio del correo al usuario-->
     <?php
-        // Seteo las variable
-        $email = $_SESSION["correo"];
-        $destino = "jeuerjeux6@gmail.com";
-        $asunto = "Confirmacion de la compra";
-        $cuerpo = <<<FIN
+    // Seteo las variable
+    $email = $_SESSION["correo"];
+    $destino = "jeuerjeux6@gmail.com";
+    $asunto = "Confirmacion de la compra";
+    $cuerpo = <<<FIN
                 <div bgcolor="blue">
                     <h1 color="#555">Tu pedido ha sido registrado correctamente</h1>
                     <p style="font-weight:bold;">Esparamos que vuelva a comprar en nuestra página $email</p>
                 </div>
                 FIN;
-        
-        // Estas etiquetas son para el envío en formato HTML
-        $headers = "MIME-Version: 1.0\r\n";
-        $headers .= "Content-type: text/html; charset=utf-8\rn\n";
 
-        // Direcion del remitente
-        $headers .= "From: $email\r\n";
+    // Estas etiquetas son para el envío en formato HTML
+    $headers = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-type: text/html; charset=utf-8\rn\n";
 
-        // Ruta del mensaje desde origen a destino
-        $headers .= "Return-path: $destino\r\n";
+    // Direcion del remitente
+    $headers .= "From: $email\r\n";
 
-        // envio del email;
-        mail($destino, $asunto, $cuerpo, $headers);
+    // Ruta del mensaje desde origen a destino
+    $headers .= "Return-path: $destino\r\n";
+
+    // envio del email;
+    mail($destino, $asunto, $cuerpo, $headers);
 
     ?>
     <!--Primero muestro el mensaje de confirmacion-->
     <div class="content">
         <div class="Confirmacion-de-pedido">
             <h2>Agradecemos tu pedido</h2>
-            <p>Los detalles de tu pedido han sido enviados a tu correo electrónico.<a
-                    href="https://mail.google.com/" target="_blank"><?php echo $email?></a>.</p>
+            <p>Los detalles de tu pedido han sido enviados a tu correo electrónico.<a href="https://mail.google.com/" target="_blank"><?php echo $email ?></a>.</p>
             <div class="boton">
                 <button><a href="./miCarrito.php">Volver a mi carrito</a></button>
             </div>
@@ -79,17 +78,17 @@
         $consulta = $db->prepare(BORRAR_CONTENIDO_USUARIO);
         $consulta->bindParam(1, $id_carrito);
         $consulta->execute();
-        if($consulta->rowCount() <= 0){
+        if ($consulta->rowCount() <= 0) {
             throw new Exception("No se ha podido borrar el contenido del carrito", 1);
         }
         $db->commit();
     } catch (PDOException $e) {
-        echo "Error PDOException: ".$e->getMessage();
+        echo "Error PDOException: " . $e->getMessage();
         $db->rollBack();
-    } catch (Exception $e){
-        echo "Error Exception: ".$e->getMessage();
+    } catch (Exception $e) {
+        echo "Error Exception: " . $e->getMessage();
         $db->rollBack();
-    } 
+    }
     ?>
 </body>
 
